@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/global_widgets/boucing.dart';
-import 'package:habits_app/global_widgets/custom_input.dart';
-import 'package:habits_app/pages/home/widgets/customDropDown.dart';
+import 'package:habits_app/ui/widgets/boucing.dart';
+import 'package:habits_app/ui/widgets/customDropDown.dart';
+import 'package:habits_app/ui/widgets/custom_input.dart';
 
 class DialogCreateHabit extends StatefulWidget {
   DialogCreateHabit({Key? key}) : super(key: key);
@@ -50,24 +50,28 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
+                        padding: const EdgeInsets.only(left: 10.0, bottom: 3.0),
                         child: Text(
                           'Dias.',
                           style: TextStyle(
-                              fontSize: 20, color: CustomColors.blanco),
+                            fontSize: 20,
+                            color: CustomColors.blanco,
+                          ),
                         ),
                       ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        children: [
-                          circleDay('D'),
-                          circleDay('L'),
-                          circleDay('M'),
-                          circleDay('M'),
-                          circleDay('J'),
-                          circleDay('V'),
-                          circleDay('S'),
-                        ],
+                      Center(
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          children: [
+                            circleDay('D'),
+                            circleDay('L'),
+                            circleDay('M'),
+                            circleDay('M'),
+                            circleDay('J'),
+                            circleDay('V'),
+                            circleDay('S'),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -83,7 +87,9 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                         child: Text(
                           'Hora.',
                           style: TextStyle(
-                              fontSize: 20, color: CustomColors.blanco),
+                            fontSize: 20,
+                            color: CustomColors.blanco,
+                          ),
                         ),
                       ),
                       Align(
@@ -169,11 +175,12 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
   }
 
   Padding circleDay(String label) {
+    final medida = MediaQuery.of(context).size.width < 400;
     return Padding(
       padding: const EdgeInsets.only(left: 4),
       child: Container(
-        width: 35,
-        height: 35,
+        width: medida ? 35 : 40,
+        height: medida ? 35 : 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: CustomColors.azul,
@@ -191,7 +198,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
             style: TextStyle(
               color: CustomColors.blanco,
               fontWeight: FontWeight.bold,
-              fontSize: 17,
+              fontSize: medida ? 17 : 20,
             ),
           ),
         ),

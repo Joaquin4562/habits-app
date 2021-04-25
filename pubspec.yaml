@@ -15,6 +15,8 @@ dependencies:
   cloud_firestore:
   firebase_auth:
   google_sign_in:
+  syncfusion_flutter_calendar:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:habits_app/customColors.dart';
-import 'package:habits_app/pages/auth/recovery.dart';
-import 'package:habits_app/pages/auth/sign-in.dart';
-import 'package:habits_app/pages/auth/sign-up.dart';
-import 'package:habits_app/pages/home/home.page.dart';
-
-import 'pages/home/pages-tabs/home-tab-pages/select-habit.dart';
+import 'package:habits_app/ui/pages/auth/recovery.dart';
+import 'package:habits_app/ui/pages/auth/sign-in.dart';
+import 'package:habits_app/ui/pages/auth/sign-up.dart';
+import 'package:habits_app/ui/pages/home/home.page.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/select-habit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

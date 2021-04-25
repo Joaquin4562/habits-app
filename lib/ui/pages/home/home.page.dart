@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/customIcons.dart';
-import 'package:habits_app/pages/home/pages-tabs/advance-tab.dart';
-import 'package:habits_app/pages/home/pages-tabs/calendar-tab.dart';
-import 'package:habits_app/pages/home/pages-tabs/home-tab.dart';
-import 'package:habits_app/pages/home/widgets/customBottomNB.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/advance-tab.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/calendar-tab.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab.dart';
+import 'package:habits_app/ui/widgets/customBottomNB.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

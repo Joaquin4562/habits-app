@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/global_widgets/custom_input.dart';
-import 'package:habits_app/pages/auth/widgets/btn-auth.dart';
+import 'package:habits_app/ui/widgets/btn-auth.dart';
+import 'package:habits_app/ui/widgets/custom_input.dart';
 
-class RecoveryPage extends StatelessWidget {
-  const RecoveryPage({Key? key}) : super(key: key);
+class SignUp extends StatelessWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class RecoveryPage extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Align(
@@ -25,7 +26,7 @@ class RecoveryPage extends StatelessWidget {
                   tag: 'logo',
                   child: Image(
                     image: AssetImage('assets/img/logo.png'),
-                    height: 200,
+                    height: 70,
                   ),
                 ),
               ),
@@ -34,7 +35,7 @@ class RecoveryPage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Recuperar',
+              'Registro',
               style: TextStyle(
                 color: CustomColors.blanco,
                 fontSize: 35,
@@ -44,11 +45,30 @@ class RecoveryPage extends StatelessWidget {
               label: 'Correo electrónico',
               icono: Icons.mail,
             ),
+            CustomInput(
+              label: 'Contraseña',
+              icono: Icons.lock,
+              isPassword: true,
+            ),
+            CustomInput(
+              label: 'Nombre completo',
+              icono: Icons.person,
+            ),
+            CustomInput(
+              label: 'Edad',
+              icono: Icons.person_add_alt_1,
+            ),
+            CustomInput(
+              label: 'Sexo',
+              icono: Icons.person_add_alt_1,
+            ),
             Hero(
               tag: 'button-auth',
               child: ButtonAuth(
-                onPressed: () {},
-                label: 'Recuperar contraseña',
+                onPressed: () {
+                  // TODO: implementar signup
+                },
+                label: 'Registrarse',
               ),
             ),
           ],

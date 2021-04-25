@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/global_widgets/custom_input.dart';
-import 'package:habits_app/pages/auth/services/sign-in.service.dart';
-import 'package:habits_app/pages/auth/services/sign-up.service.dart';
-import 'package:habits_app/pages/auth/widgets/btn-auth.dart';
-import 'package:habits_app/pages/auth/widgets/btn-google-sign-in.dart';
-import 'package:habits_app/pages/auth/widgets/custom-divider.dart';
+import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/domain/request/requestSignIn.dart';
+import 'package:habits_app/ui/widgets/btn-auth.dart';
+import 'package:habits_app/ui/widgets/btn-google-sign-in.dart';
+import 'package:habits_app/ui/widgets/custom-divider.dart';
+import 'package:habits_app/ui/widgets/custom_input.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -44,7 +44,10 @@ class SignIn extends StatelessWidget {
             ),
             ButtonGoogleSignIn(
               onPressed: () {
-                signUpWithGoogle();
+                ApiRepositoryImpl().signIn(
+                  RequestSignIn(
+                      password: '121212121', email: 'joaquin@gmail.com'),
+                );
               },
             ),
             CustomDivider(),

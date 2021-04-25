@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/global_widgets/boucing.dart';
-import 'package:habits_app/pages/home/pages-tabs/home-tab-pages/habits.page.dart';
-import 'package:habits_app/pages/home/pages-tabs/home-tab-pages/todo.page.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/habits.page.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/todo.page.dart';
+import 'package:habits_app/ui/widgets/boucing.dart';
 
 class HomeTab extends StatefulWidget {
   HomeTab({Key? key}) : super(key: key);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/global_widgets/boucing.dart';
-import 'package:habits_app/pages/home/pages-tabs/home-tab-pages/services/habits.model.dart';
-import 'package:habits_app/pages/home/widgets/custombtn-habits.dart';
-import 'package:habits_app/pages/home/widgets/dialogCreateHabit.dart';
+import 'package:habits_app/domain/models/habits.model.dart';
+import 'package:habits_app/ui/widgets/boucing.dart';
+import 'package:habits_app/ui/widgets/custombtn-habits.dart';
+import 'package:habits_app/ui/widgets/dialogCreateHabit.dart';
 
 class CreateHabitPage extends StatefulWidget {
   const CreateHabitPage({Key? key}) : super(key: key);

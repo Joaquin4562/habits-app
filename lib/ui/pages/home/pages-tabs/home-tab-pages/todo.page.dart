@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:intl/intl.dart';
 
-class TodoList extends StatelessWidget {
+class TodoList extends StatefulWidget {
   const TodoList({Key? key}) : super(key: key);
+
+  @override
+  _TodoListState createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final locale = Localizations.localeOf(context).toString();
     final list = List.generate(24, (index) {
       if (index < 12) {
         if (index < 10) return "0$index am";
@@ -31,7 +44,7 @@ class TodoList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Abril',
+                      DateFormat.MMMM(locale).format(today),
                       style: TextStyle(
                         color: CustomColors.blanco,
                         fontSize: 40,
@@ -41,7 +54,7 @@ class TodoList extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
-                        'Lunes',
+                        DateFormat.EEEE(locale).format(today),
                         style: TextStyle(
                           color: CustomColors.lila,
                           fontSize: 45,
@@ -54,8 +67,8 @@ class TodoList extends StatelessWidget {
                 Stack(
                   children: [
                     Container(
-                      height: 140,
-                      width: 140,
+                      height: 120,
+                      width: 120,
                       decoration: BoxDecoration(
                         color: CustomColors.azul,
                         shape: BoxShape.circle,
@@ -77,8 +90,8 @@ class TodoList extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.center,
                         child: Container(
-                          width: 110,
-                          height: 110,
+                          width: 95,
+                          height: 95,
                           decoration: BoxDecoration(
                             color: CustomColors.azul.dark,
                             shape: BoxShape.circle,
@@ -86,11 +99,11 @@ class TodoList extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.center,
                             child: Text(
-                              '5',
+                              DateFormat('d').format(today),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: CustomColors.blanco,
-                                fontSize: 50,
+                                fontSize: 45,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
