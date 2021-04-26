@@ -6,5 +6,6 @@ abstract class ApiRepositoryInterface {
   Future<ResponseSignIn?> signIn (RequestSignIn requestSignIn); 
   Future<String?> signUp (RequestSignUp requestSignUp); 
   Future<String?> signUpWithGoogle (); 
+  Future<String?> recoveryPassword (); 
   Future<void> signOut (); 
 }

@@ -88,4 +88,10 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
       print(error);
     });
   }
+
+  @override
+  Future<String?> recoveryPassword() {
+    // TODO: implement recoveryPassword
+    throw UnimplementedError();
+  }
 }

@@ -3,6 +3,7 @@ import 'package:habits_app/customColors.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/customDropDown.dart';
 import 'package:habits_app/ui/widgets/custom_input.dart';
+import 'package:habits_app/ui/widgets/day_button.dart';
 
 class DialogCreateHabit extends StatefulWidget {
   DialogCreateHabit({Key? key}) : super(key: key);
@@ -13,6 +14,24 @@ class DialogCreateHabit extends StatefulWidget {
 
 class _DialogCreateHabitState extends State<DialogCreateHabit> {
   TimeOfDay time = TimeOfDay.now();
+  final daysWeek = [
+    'D',
+    'L',
+    'M',
+    'M',
+    'J',
+    'V',
+    'S',
+  ];
+  final activeDays = [
+    true,
+    false,
+    false,
+    true,
+    false,
+    true,
+    false,
+  ];
   @override
   Widget build(BuildContext context) {
     final medida = MediaQuery.of(context).size.width < 400;
@@ -62,15 +81,9 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                       Center(
                         child: Wrap(
                           alignment: WrapAlignment.center,
-                          children: [
-                            circleDay('D'),
-                            circleDay('L'),
-                            circleDay('M'),
-                            circleDay('M'),
-                            circleDay('J'),
-                            circleDay('V'),
-                            circleDay('S'),
-                          ],
+                          spacing: 5,
+                          children:
+                              List.generate(7, (index) => builButtonDay(index)),
                         ),
                       ),
                     ],
@@ -145,7 +158,11 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 15.0, left: 10.0, right: 10.0, bottom: 5.0),
+                    top: 15.0,
+                    left: 10.0,
+                    right: 10.0,
+                    bottom: 5.0,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -174,35 +191,18 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
     );
   }
 
-  Padding circleDay(String label) {
-    final medida = MediaQuery.of(context).size.width < 400;
-    return Padding(
-      padding: const EdgeInsets.only(left: 4),
-      child: Container(
-        width: medida ? 35 : 40,
-        height: medida ? 35 : 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: CustomColors.azul,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF150638),
-              offset: Offset(2.0, 2.0),
-            )
-          ],
-        ),
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: CustomColors.blanco,
-              fontWeight: FontWeight.bold,
-              fontSize: medida ? 17 : 20,
-            ),
-          ),
-        ),
+  Widget builButtonDay(int index) {
+    return BoucingWidget(
+      child: DayButton(
+        label: daysWeek[index],
+        active: activeDays[index],
       ),
+    onPress: () {
+      setState(() {
+        bool active = activeDays[index];
+        activeDays[index] = !active;
+      });
+    },
     );
   }
 }
