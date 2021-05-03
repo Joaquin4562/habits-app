@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/repository/api_repository_interface.dart';
 import 'package:habits_app/domain/response/response_signIn.dart';
 import 'package:habits_app/domain/request/requestSignUp.dart';
 import 'package:habits_app/domain/request/requestSignIn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiRepositoryImpl extends ApiRepositoryInterface {
   @override
@@ -91,7 +93,22 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
 
   @override
   Future<String?> recoveryPassword() {
-    // TODO: implement recoveryPassword
+    // TODO: Recovery password implementation
     throw UnimplementedError();
+  }
+
+  @override
+  Future<QuerySnapshot?> getPredeterminatedHabits() async {
+    QuerySnapshot snapshot;
+    CollectionReference habitsCollection =
+        FirebaseFirestore.instance.collection('habitos');
+    snapshot = await habitsCollection.get();
+    return snapshot;
+  }
+
+  @override
+  Future<String?> saveHabit(Habitos habito) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // TODO: save habit in the firestore with reference to User
   }
 }

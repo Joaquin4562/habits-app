@@ -14,65 +14,65 @@ class SignUp extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: ListView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Hero(
-                  tag: 'logo',
-                  child: Image(
-                    image: AssetImage('assets/img/logo.png'),
-                    height: 70,
-                  ),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Hero(
+                tag: 'logo',
+                child: Image(
+                  image: AssetImage('assets/img/logo.png'),
+                  height: 70,
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Registro',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: CustomColors.blanco,
+              fontSize: 45,
             ),
-            Text(
-              'Registro',
-              style: TextStyle(
-                color: CustomColors.blanco,
-                fontSize: 35,
-              ),
+          ),
+          CustomInput(
+            label: 'Correo electrónico',
+            icono: Icons.mail,
+          ),
+          CustomInput(
+            label: 'Contraseña',
+            icono: Icons.lock,
+            isPassword: true,
+          ),
+          CustomInput(
+            label: 'Nombre completo',
+            icono: Icons.person,
+          ),
+          CustomInput(
+            label: 'Edad',
+            icono: Icons.person_add_alt_1,
+          ),
+          CustomInput(
+            label: 'Sexo',
+            icono: Icons.person_add_alt_1,
+          ),
+          Hero(
+            tag: 'button-auth',
+            child: ButtonAuth(
+              onPressed: () {
+                // TODO: implementar signup
+              },
+              label: 'Registrarse',
             ),
-            CustomInput(
-              label: 'Correo electrónico',
-              icono: Icons.mail,
-            ),
-            CustomInput(
-              label: 'Contraseña',
-              icono: Icons.lock,
-              isPassword: true,
-            ),
-            CustomInput(
-              label: 'Nombre completo',
-              icono: Icons.person,
-            ),
-            CustomInput(
-              label: 'Edad',
-              icono: Icons.person_add_alt_1,
-            ),
-            CustomInput(
-              label: 'Sexo',
-              icono: Icons.person_add_alt_1,
-            ),
-            Hero(
-              tag: 'button-auth',
-              child: ButtonAuth(
-                onPressed: () {
-                  // TODO: implementar signup
-                },
-                label: 'Registrarse',
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

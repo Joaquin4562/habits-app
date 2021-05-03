@@ -17,7 +17,6 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print(size.width);
     final medida = (size.width > 400);
     return SingleChildScrollView(
       child: Column(

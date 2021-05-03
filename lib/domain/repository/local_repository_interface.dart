@@ -1,3 +1,4 @@
+import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/models/user.model.dart';
 
 abstract class LocalRepositoryInterface {

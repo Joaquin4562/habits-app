@@ -1,4 +1,5 @@
 class Usuario {
+  String uid;
   String correo;
   String constrasena;
   String nombreCompeto;
@@ -6,6 +7,7 @@ class Usuario {
   String sexo;
 
   Usuario({
+    required this.uid,
     required this.constrasena,
     required this.correo,
     required this.edad,

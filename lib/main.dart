@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         'recovery': (_) => RecoveryPage(),
         'home': (_) => HomePage(),
         'create-habit': (_) => CreateHabitPage(),
+        'habit-p': (_) => CreateHabitPage(),
       },
     );
   }

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_repository_impl.dart';
 import 'package:habits_app/domain/models/habits.model.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/predeterminate.habits.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/custombtn-habits.dart';
 import 'package:habits_app/ui/widgets/dialogCreateHabit.dart';
@@ -15,32 +18,12 @@ class CreateHabitPage extends StatefulWidget {
 class _CreateHabitPageState extends State<CreateHabitPage> {
   @override
   Widget build(BuildContext context) {
-    final habitos = [
-      Categories(
-        color: CustomColors.rosa,
-        icono: 'estilo',
-        nombre: 'Estilo de vida',
-      ),
-      Categories(
-        color: CustomColors.morado,
-        icono: 'salud',
-        nombre: 'Salud Mental',
-      ),
-      Categories(
-        color: CustomColors.cea,
-        icono: 'alimentacion',
-        nombre: 'Alimentación',
-      ),
-      Categories(
-        color: CustomColors.redAccion,
-        icono: 'fisico',
-        nombre: 'Cambio físico',
-      ),
-      Categories(
-        color: CustomColors.nature,
-        icono: 'hogar',
-        nombre: 'Hogar',
-      ),
+    final colores = [
+      CustomColors.rosa,
+      CustomColors.morado,
+      CustomColors.cea,
+      CustomColors.redAccion,
+      CustomColors.nature,
     ];
     return Scaffold(
       appBar: AppBar(
@@ -93,9 +76,12 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         )
                       ],
                     ),
-                    child: Image(
-                      width: 80,
-                      image: AssetImage('assets/img/moon.png'),
+                    child: Hero(
+                      tag: 'moon',
+                      child: Image(
+                        width: 80,
+                        image: AssetImage('assets/img/moon.png'),
+                      ),
                     ),
                   ),
                 ),
@@ -139,21 +125,53 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: habitos.length,
-              itemBuilder: (context, index) {
-                return BoucingWidget(
-                  boucingScale: 0.2,
-                  child: CustomBtnHabits(
-                    icono: Icons.arrow_forward_ios_sharp,
-                    label: habitos[index].nombre,
-                    colorIcon: CustomColors.azul.dark,
-                    colorText: CustomColors.blanco,
-                    colorButton: habitos[index].color,
-                    imagen: 'assets/img/${habitos[index].icono}.png',
+            child: FutureBuilder<QuerySnapshot?>(
+              future: ApiRepositoryImpl().getPredeterminatedHabits(),
+              builder: (context, snapshot) {
+                Widget child = Container(
+                  child: Center(
+                    child: Text(
+                      'No hay datos :c',
+                      style: TextStyle(
+                        color: CustomColors.blanco,
+                        fontSize: 30,
+                      ),
+                    ),
                   ),
                 );
+                if (snapshot.hasData) {
+                  final habitos = snapshot.data!.docs;
+                  child = ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: habitos.length,
+                    itemBuilder: (context, index) {
+                      return BoucingWidget(
+                        boucingScale: 0.2,
+                        child: CustomBtnHabits(
+                          icono: Icons.arrow_forward_ios_sharp,
+                          label: habitos[index]['nombre'],
+                          colorIcon: CustomColors.azul.dark,
+                          colorText: CustomColors.blanco,
+                          colorButton: colores[index],
+                          imagen:
+                              'assets/img/${habitos[index]['icono']}.png',
+                        ),
+                        onPress: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PredeterminatedHabits(
+                                title: habitos[index]['nombre'],
+                                color: colores[index],
+                                habitos: habitos[index]['habitos-predeterminados'],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }
+                return child;
               },
             ),
           ),

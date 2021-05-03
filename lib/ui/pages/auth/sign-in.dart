@@ -15,113 +15,113 @@ class SignIn extends StatelessWidget {
     final medida = (MediaQuery.of(context).size.width > 400);
     return Scaffold(
       backgroundColor: CustomColors.azul.dark,
-      body: SingleChildScrollView(
+      body: ListView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Hero(
-                tag: 'logo',
-                child: Image(
-                  width: medida ? 450 : 350,
-                  image: AssetImage('assets/img/logo.png'),
-                ),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        children: [
+          SizedBox(
+            height: 60,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                width: medida ? 450 : 350,
+                image: AssetImage('assets/img/logo.png'),
               ),
             ),
-            SizedBox(
-              height: 20,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Iniciar sesión',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: CustomColors.blanco,
+              fontSize: 45,
             ),
-            Text(
-              'Iniciar sesión',
-              style: TextStyle(
-                color: CustomColors.blanco,
-                fontSize: 35,
-              ),
-            ),
-            ButtonGoogleSignIn(
+          ),
+          ButtonGoogleSignIn(
+            onPressed: () {
+              ApiRepositoryImpl().signIn(
+                RequestSignIn(
+                    password: '121212121', email: 'joaquin@gmail.com'),
+              );
+            },
+          ),
+          CustomDivider(),
+          CustomInput(
+            label: 'Correo electrónico',
+            icono: Icons.mail,
+          ),
+          CustomInput(
+            label: 'Contraseña',
+            icono: Icons.lock,
+            isPassword: true,
+          ),
+          Hero(
+            tag: 'button-auth',
+            child: ButtonAuth(
               onPressed: () {
-                ApiRepositoryImpl().signIn(
-                  RequestSignIn(
-                      password: '121212121', email: 'joaquin@gmail.com'),
-                );
+                Navigator.of(context).pushReplacementNamed('home');
+                // signInWithCredentials('pedro@gmail.com', 'joaquin333');
               },
+              label: 'Iniciar',
             ),
-            CustomDivider(),
-            CustomInput(
-              label: 'Correo electrónico',
-              icono: Icons.mail,
+          ),
+          const SizedBox(height: 20),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, 'recovery');
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Text(
+              '¿Olvidaste tu contraseña?',
+              style: TextStyle(
+                  color: CustomColors.blanco,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18),
             ),
-            CustomInput(
-              label: 'Contraseña',
-              icono: Icons.lock,
-              isPassword: true,
-            ),
-            Hero(
-              tag: 'button-auth',
-              child: ButtonAuth(
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed('home');
-                  // signInWithCredentials('pedro@gmail.com', 'joaquin333');
-                },
-                label: 'Iniciar',
-              ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, 'recovery');
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: Text(
-                '¿Olvidaste tu contraseña?',
-                style: TextStyle(
-                    color: CustomColors.blanco,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 10.0, left: 17.0, bottom: 15.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '¿No tienes cuenta?',
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 10.0, left: 17.0, bottom: 15.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '¿No tienes cuenta?',
+                    style: TextStyle(
+                      color: CustomColors.blanco,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('sign-up');
+                    },
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: Text(
+                      'Registrate',
                       style: TextStyle(
                         color: CustomColors.blanco,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed('sign-up');
-                      },
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Text(
-                        'Registrate',
-                        style: TextStyle(
-                          color: CustomColors.blanco,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

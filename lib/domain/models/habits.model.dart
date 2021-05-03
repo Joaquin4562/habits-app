@@ -6,20 +6,8 @@ class Habitos {
   String? categoria;
   List<String>? dias;
   String? hora;
-  Color? color;
-  
-  Habitos({this.categoria, this.dias, this.hora, this.nombre, this.color});
 
-
-  getPredeterminatedHabits () {
-    return [
-      Habitos(
-        categoria: 'salud',
-        color: CustomColors.nature,
-        nombre: 'Naturaleza'
-      ),
-    ];
-  }
+  Habitos({this.categoria, this.dias, this.hora, this.nombre});
 }
 
 class Categories {
