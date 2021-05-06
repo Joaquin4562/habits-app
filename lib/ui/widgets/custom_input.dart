@@ -8,12 +8,12 @@ class CustomInput extends StatelessWidget {
     this.icono,
     this.isPassword,
     this.onSaved,
-    this.validator
+    this.validator,
   }) : super(key: key);
   final String label;
   final IconData? icono;
   final Function(String?)? onSaved;
-  final Function(String?)? validator;
+  final FormFieldValidator<String>? validator;
   final bool? isPassword;
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,7 @@ class CustomInput extends StatelessWidget {
             ),
           ),
           TextFormField(
-            validator: (value) {
-              validator!(value);
-            },
+            validator: validator,
             onSaved: (value) {
               onSaved!(value);
             },
@@ -60,7 +58,7 @@ class CustomInput extends StatelessWidget {
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
                 borderSide: BorderSide(
-                  color: Colors.red,
+                  color: Colors.red.shade300,
                   width: 1.5,
                   style: BorderStyle.solid,
                 ),
@@ -86,6 +84,10 @@ class CustomInput extends StatelessWidget {
                   style: BorderStyle.solid,
                 ),
               ),
+              errorStyle: TextStyle(
+                color: Colors.red.shade300,
+                fontSize: 18,
+              )
             ),
           )
         ],

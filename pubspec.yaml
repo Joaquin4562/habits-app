@@ -17,6 +17,7 @@ dependencies:
   google_sign_in:
   shared_preferences:
   table_calendar: ^3.0.0
+  validators:
 
 dev_dependencies:
   flutter_test:

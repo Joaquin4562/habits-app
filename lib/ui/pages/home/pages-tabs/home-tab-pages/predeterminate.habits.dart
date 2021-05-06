@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
+import 'package:habits_app/ui/widgets/custombtn-habits.dart';
 
 class PredeterminatedHabits extends StatelessWidget {
   const PredeterminatedHabits({
@@ -92,17 +93,23 @@ class PredeterminatedHabits extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: habitos.length,
-                itemBuilder: (context, index) {
-                  return BoucingWidget(
-                      child: Text(
-                    habitos[index]['nombre'],
-                    style: TextStyle(
-                      color: CustomColors.blanco,
-                    ),
-                  ));
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: ListView.builder(
+                  itemCount: habitos.length,
+                  itemBuilder: (context, index) {
+                    return BoucingWidget(
+                      boucingScale: 0.2,
+                      child: CustomBtnHabits(
+                        icono: Icons.more_horiz_outlined,
+                        imagen: 'assets/img/new.png',
+                        colorText: CustomColors.azul,
+                        colorButton: color,
+                        label: habitos[index]['nombre'],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

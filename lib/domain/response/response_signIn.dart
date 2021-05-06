@@ -1,12 +1,12 @@
+import 'package:habits_app/domain/models/user.model.dart';
+
 class ResponseSignIn {
   ResponseSignIn({
-    required this.correo,
-    required this.edad,
-    required this.nombre,
-    required this.sexo,
+    this.usuario,
+    required this.message,
+    required this.error,
   });
-  String nombre;
-  String edad;
-  String sexo;
-  String correo;
+  Usuario? usuario;
+  String message;
+  bool error;
 }
