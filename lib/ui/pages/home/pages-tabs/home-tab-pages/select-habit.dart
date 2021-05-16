@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/data/datasource/api_repository_impl.dart';
-import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/predeterminate.habits.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/custombtn-habits.dart';
@@ -19,7 +18,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   @override
   Widget build(BuildContext context) {
     final colores = [
-      CustomColors.rosa,
+      CustomColors.fisico,
       CustomColors.morado,
       CustomColors.cea,
       CustomColors.redAccion,
@@ -130,12 +129,19 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
               builder: (context, snapshot) {
                 Widget child = Container(
                   child: Center(
-                    child: Text(
-                      'No hay datos :c',
-                      style: TextStyle(
-                        color: CustomColors.blanco,
-                        fontSize: 30,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Cargando datos...',
+                          style: TextStyle(
+                            color: CustomColors.blanco,
+                            fontSize: 30,
+                          ),
+                        ),
+                        CircularProgressIndicator(),
+                      ],
                     ),
                   ),
                 );

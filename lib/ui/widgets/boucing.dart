@@ -39,6 +39,7 @@ class _BoucingWidgetState extends State<BoucingWidget>
     return GestureDetector(
       onTapUp: _onTapUp,
       onTapDown: _onTapDown,
+      onTapCancel: _onTapCanel,
       child: Transform.scale(
         scale: _scale,
         child: widget.child,
@@ -48,6 +49,9 @@ class _BoucingWidgetState extends State<BoucingWidget>
 
   _onTapDown(TapDownDetails details) {
     _controller.forward();
+  }
+  _onTapCanel() {
+    _controller.reverse();
   }
 
   _onTapUp(TapUpDetails details) {

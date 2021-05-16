@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/custombtn-habits.dart';
+import 'package:habits_app/ui/widgets/habitsHomeButton.dart';
 
 class PredeterminatedHabits extends StatelessWidget {
   const PredeterminatedHabits({
@@ -100,12 +101,14 @@ class PredeterminatedHabits extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return BoucingWidget(
                       boucingScale: 0.2,
-                      child: CustomBtnHabits(
-                        icono: Icons.more_horiz_outlined,
+                      child: HabitsHomeButton(
                         imagen: 'assets/img/new.png',
-                        colorText: CustomColors.azul,
-                        colorButton: color,
+                        colorText: CustomColors.blanco,
+                        hourColor: Colors.deepOrangeAccent[200],
+                        colorButton: color.withOpacity(0.9),
                         label: habitos[index]['nombre'],
+                        time: habitos[index]['hora'],
+                        category: title,
                       ),
                     );
                   },

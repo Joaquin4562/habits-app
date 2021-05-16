@@ -19,7 +19,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   @override
   void initState() {
-    // LocalRepositoryImpl().clearDataInformation();
+    LocalRepositoryImpl().clearDataInformation();
     LocalRepositoryImpl().getToken().then((value) {
       if (value != null) {
         Navigator.pushReplacementNamed(context, 'home');
@@ -118,11 +118,11 @@ class _SignInState extends State<SignIn> {
                     _formKey.currentState!.save();
                     final response =
                         await ApiRepositoryImpl().signIn(requestSignIn);
-                    print(response);
                     if (!response!.error) {
                       final user = await LocalRepositoryImpl()
                           .saveUser(response.usuario!);
-                      LocalRepositoryImpl().saveToken(user!.uid);
+                      print(user!.uid);
+                      LocalRepositoryImpl().saveToken(user.uid);
                       Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

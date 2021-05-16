@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:habits_app/data/datasource/local_repository_impl.dart';
 import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/models/user.model.dart';
 import 'package:habits_app/domain/repository/api_repository_interface.dart';
+import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 import 'package:habits_app/domain/response/response_signIn.dart';
 import 'package:habits_app/domain/request/requestSignUp.dart';
 import 'package:habits_app/domain/request/requestSignIn.dart';
@@ -28,7 +30,7 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
         error: false,
         usuario: Usuario(
           uid: userCredencials.user!.uid,
-          constrasena: userData['contrasena'],
+          constrasena: '',
           correo: userData['correo'],
           edad: userData['edad'],
           nombreCompeto: userData['nombre_completo'],
@@ -36,7 +38,20 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
         ),
       );
     } on FirebaseAuthException catch (e) {
-      return ResponseSignIn(message: e.code, error: true);
+      String message = 'NADA';
+      print(e.code);
+      switch (e.code) {
+        case 'wrong-password':
+          message = 'Contraseña incorrecta';
+          break;
+        case 'too-many-requests':
+          message = 'Demaciadas solicitudes';
+          break;
+        case 'user-not-found':
+          message = 'Usuario no encontrado';
+          break;
+      }
+      return ResponseSignIn(message: message, error: true);
     }
   }
 
@@ -59,14 +74,21 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
         'edad': requestSignUp.edad,
         'correo': requestSignUp.correo,
         'sexo': requestSignUp.sexo,
+        'habitos': [],
       });
       return ResponseSignUp(false, 'Usuario registrado');
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        return ResponseSignUp(true, 'El correo ya esta registrado');
-      } else {
-        return ResponseSignUp(true, 'Error al registrar');
+      print(e.code);
+      String msg = 'Error no encontrado';
+      switch (e.code) {
+        case 'weak-password':
+          msg = 'La contraseña es muy corta';
+          break;
+        case 'email-already-in-use':
+          msg = 'El correo ya esta registrado';
+          break;
       }
+      return ResponseSignUp(true, msg);
     }
   }
 
@@ -107,6 +129,7 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
           'correo': usuario['email'],
           'edad': '',
           'sexo': '',
+          'habitos': [],
         };
         collection.doc(user.user!.uid).set(userData).then((value) {
           return ResponseSignIn(error: false, message: 'Usuario logeado');
@@ -136,5 +159,36 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
   Future<String?> saveHabit(Habitos habito) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // TODO: save habit in the firestore with reference to User
+  }
+
+  @override
+  Future<String?> saveUserHabit(RequestSaveUserHabit habito) async {
+    try {
+      CollectionReference userCollection =
+          FirebaseFirestore.instance.collection('usuarios');
+      final uid = await LocalRepositoryImpl().getToken();
+      final userRef = userCollection.doc(uid);
+      userRef.update({
+        'habitos': FieldValue.arrayUnion([
+          {
+            'nombre': habito.name,
+            'categoria': habito.category,
+            'dias': habito.days,
+            'hora': habito.hour,
+          }
+        ]),
+      });
+      return 'Se inserto';
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Future<List<dynamic>> getUserHabits() async {
+    final collection = FirebaseFirestore.instance.collection('usuarios');
+    final uid = await LocalRepositoryImpl().getToken();
+    final userDoc = await collection.doc(uid).get();
+    return userDoc.data()!['habitos'];
   }
 }

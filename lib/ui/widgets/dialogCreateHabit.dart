@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/customDropDown.dart';
 import 'package:habits_app/ui/widgets/custom_input.dart';
@@ -24,24 +26,20 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
     'S',
   ];
   final activeDays = [
-    true,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
+    true, // domingo
+    false, // lunes
+    false, // martes
+    true, // miercoles
+    false, // jueves
+    true, // viernes
+    false, // sabado
   ];
+  final _formKey = GlobalKey<FormState>();
+  String name = '';
+  String category = '';
   @override
   Widget build(BuildContext context) {
     final medida = MediaQuery.of(context).size.width < 400;
-    final list = [
-      'Salud mental',
-      'Estulo de vida',
-      'Alimentación',
-      'Cambio fisico',
-      'Hogar'
-    ];
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -52,138 +50,202 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListBody(
-              children: [
-                Text(
-                  'Crea un habito',
-                  style: TextStyle(
-                    color: CustomColors.blanco,
-                    fontSize: medida ? 35 : 45,
-                    fontWeight: FontWeight.bold,
+            child: Form(
+              key: _formKey,
+              child: ListBody(
+                children: [
+                  Text(
+                    'Crea un habito',
+                    style: TextStyle(
+                      color: CustomColors.blanco,
+                      fontSize: medida ? 35 : 45,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                CustomInput(label: 'Nombre.'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0, bottom: 3.0),
-                        child: Text(
-                          'Dias.',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: CustomColors.blanco,
+                  CustomInput(
+                    label: 'Nombre.',
+                    onSaved: (value) {
+                      name = value!;
+                    },
+                    validator: (value) =>
+                        value!.isEmpty ? 'Asegurate de escribir algo' : null,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 10.0, bottom: 3.0),
+                          child: Text(
+                            'Dias.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: CustomColors.blanco,
+                            ),
                           ),
                         ),
-                      ),
-                      Center(
-                        child: Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: 5,
-                          children:
-                              List.generate(7, (index) => builButtonDay(index)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                CustomDropDown(label: 'Categoria.', items: list),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          'Hora.',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: CustomColors.blanco,
+                        Center(
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 5,
+                            children: List.generate(
+                              7,
+                              (index) => builButtonDay(index),
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: BoucingWidget(
-                            child: Container(
-                              width: 200,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: CustomColors.azul,
-                              ),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '${time.format(context)}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: CustomColors.blanco,
+                      ],
+                    ),
+                  ),
+                  FutureBuilder<List<String>>(
+                      future: getCategories(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data != null) {
+                          return CustomDropDown(
+                            label: 'Categoria.',
+                            items: snapshot.data!,
+                            onSaved: (value) {
+                              category = value!;
+                            },
+                          );
+                        } else {
+                          return CustomDropDown(
+                            label: 'Cargando datos...',
+                            items: [''],
+                          );
+                        }
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            'Hora.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: CustomColors.blanco,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: BoucingWidget(
+                              child: Container(
+                                width: 200,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: CustomColors.azul,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '${time.format(context)}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: CustomColors.blanco,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            onPress: () {
-                              showTimePicker(
-                                context: context,
-                                helpText: 'Ingresa la hora',
-                                cancelText: 'CANCELAR',
-                                confirmText: 'INSERTAR',
-                                initialEntryMode: TimePickerEntryMode.input,
-                                initialTime: TimeOfDay.now(),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: ThemeData.light().copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: CustomColors.azul,
-                                        onSurface: CustomColors.azul,
+                              onPress: () {
+                                showTimePicker(
+                                  context: context,
+                                  helpText: 'Ingresa la hora',
+                                  cancelText: 'CANCELAR',
+                                  confirmText: 'INSERTAR',
+                                  initialEntryMode: TimePickerEntryMode.input,
+                                  initialTime: TimeOfDay.now(),
+                                  builder: (context, child) {
+                                    return Theme(
+                                      data: ThemeData.light().copyWith(
+                                        colorScheme: ColorScheme.light(
+                                          primary: CustomColors.azul,
+                                          onSurface: CustomColors.azul,
+                                        ),
                                       ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              ).then((value) {
-                                setState(() {
-                                  time = value!;
+                                      child: child!,
+                                    );
+                                  },
+                                ).then((value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      time = value;
+                                    });
+                                  }
                                 });
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 15.0,
-                    left: 10.0,
-                    right: 10.0,
-                    bottom: 5.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'Cancelar',
-                        style: TextStyle(
-                          color: CustomColors.blanco,
-                          fontSize: 20,
+                              }),
                         ),
-                      ),
-                      Text(
-                        'Aceptar',
-                        style: TextStyle(
-                          color: CustomColors.blanco,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15.0,
+                      left: 10.0,
+                      right: 10.0,
+                      bottom: 5.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        BoucingWidget(
+                          onPress: () => Navigator.pop(context),
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              color: CustomColors.blanco,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        BoucingWidget(
+                          onPress: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              final res =
+                                  await ApiRepositoryImpl().saveUserHabit(
+                                RequestSaveUserHabit(
+                                  name: name,
+                                  category: category,
+                                  days: activeDays,
+                                  hour: time.format(context),
+                                ),
+                              );
+                              Navigator.pushReplacementNamed(context, 'home');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: CustomColors.lila,
+                                  content: Text(
+                                    res!,
+                                    style: TextStyle(
+                                      color: CustomColors.azul,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text(
+                            'Aceptar',
+                            style: TextStyle(
+                              color: CustomColors.blanco,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -197,12 +259,19 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
         label: daysWeek[index],
         active: activeDays[index],
       ),
-    onPress: () {
-      setState(() {
-        bool active = activeDays[index];
-        activeDays[index] = !active;
-      });
-    },
+      onPress: () {
+        setState(() {
+          bool active = activeDays[index];
+          activeDays[index] = !active;
+        });
+      },
     );
+  }
+
+  Future<List<String>> getCategories() async {
+    final res = await ApiRepositoryImpl().getPredeterminatedHabits();
+    List<String> list =
+        res!.docs.map<String>((element) => element.data()['nombre']).toList();
+    return list;
   }
 }
