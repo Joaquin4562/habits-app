@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/data/datasource/api_auth_repo_impl.dart';
 import 'package:habits_app/domain/request/requestSignUp.dart';
 import 'package:habits_app/ui/widgets/btn-auth.dart';
 import 'package:habits_app/ui/widgets/custom_input.dart';
+import 'package:habits_app/ui/widgets/snackbar.dart';
 import 'package:validators/validators.dart';
 
 class SignUp extends StatefulWidget {
@@ -113,35 +114,13 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    final response = await ApiRepositoryImpl().signUp(requestSignUp);
+                    final response = await ApiAuthRepositoryImplement().signUp(requestSignUp);
                     if (!response!.error) {
                       Navigator.of(context).pushReplacementNamed('sign-in');
                     }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: CustomColors.lila,
-                          content: Text(
-                            response.message,
-                            style: TextStyle(
-                              color: CustomColors.azul,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      );
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(response.message));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: CustomColors.lila,
-                        content: Text(
-                          'Ingresa los datos',
-                          style: TextStyle(
-                            color: CustomColors.azul,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Ingresa los datos'));
                   }
                 },
                 label: 'Registrarse',

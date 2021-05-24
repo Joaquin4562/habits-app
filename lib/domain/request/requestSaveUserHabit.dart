@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RequestSaveUserHabit {
   String name;
   String category;
-  List<bool> days;
+  List<dynamic> days;
   String hour;
 
   RequestSaveUserHabit({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/select-habit.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/custombtn-habits.dart';
@@ -19,7 +19,7 @@ class _HabitsPageState extends State<HabitsPage> {
 
   @override
   void dispose() {
-    this._scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -28,18 +28,18 @@ class _HabitsPageState extends State<HabitsPage> {
     return Scaffold(
       backgroundColor: CustomColors.azul,
       body: Container(
-        child: RawScrollbar(
-          isAlwaysShown: true,
-          controller: _scrollController,
-          thickness: 5,
-          radius: Radius.circular(20),
-          thumbColor: CustomColors.amarillo,
-          child: FutureBuilder<List<dynamic>>(
-              future: ApiRepositoryImpl().getUserHabits(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData){
-                  final data = snapshot.data!;
-                  return ListView.builder(
+        child: FutureBuilder<List<dynamic>>(
+            future: ApiHabitRepositoryImplement().getUserHabits(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = snapshot.data!;
+                return RawScrollbar(
+                  isAlwaysShown: true,
+                  controller: _scrollController,
+                  thickness: 5,
+                  radius: Radius.circular(20),
+                  thumbColor: CustomColors.amarillo,
+                  child: ListView.builder(
                     controller: _scrollController,
                     physics: BouncingScrollPhysics(),
                     itemCount: data.length,
@@ -61,26 +61,53 @@ class _HabitsPageState extends State<HabitsPage> {
                         ),
                       );
                     },
-                  );
-                } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Cargando habitos',
-                          style: TextStyle(
-                            color: CustomColors.blanco,
-                            fontSize: 25,
-                          ),
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        'No hay habitos',
+                        style: TextStyle(
+                          color: CustomColors.blanco,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
                         ),
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  );
-                }
-              }),
-        ),
+                      ),
+                      Image(
+                        image: AssetImage('assets/img/fisico.png'),
+                        width: 200,
+                        color: CustomColors.lila,
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Añade uno',
+                            style: TextStyle(
+                              color: CustomColors.blanco,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Icon(
+                            Icons.arrow_downward_rounded,
+                            size: 50,
+                            color: CustomColors.blanco,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }
+            }),
       ),
       bottomNavigationBar: BoucingWidget(
         boucingScale: 0.10,

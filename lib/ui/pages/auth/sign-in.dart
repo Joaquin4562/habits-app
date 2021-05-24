@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/data/datasource/api_auth_repo_impl.dart';
 import 'package:habits_app/data/datasource/local_repository_impl.dart';
 import 'package:habits_app/domain/request/requestSignIn.dart';
 import 'package:habits_app/ui/widgets/btn-auth.dart';
 import 'package:habits_app/ui/widgets/btn-google-sign-in.dart';
 import 'package:habits_app/ui/widgets/custom-divider.dart';
 import 'package:habits_app/ui/widgets/custom_input.dart';
+import 'package:habits_app/ui/widgets/snackbar.dart';
 import 'package:validators/validators.dart';
 
 class SignIn extends StatefulWidget {
@@ -68,20 +69,9 @@ class _SignInState extends State<SignIn> {
             ),
             ButtonGoogleSignIn(
               onPressed: () async {
-                final response = await ApiRepositoryImpl().signUpWithGoogle();
+                final response = await ApiAuthRepositoryImplement().signUpWithGoogle();
                 if (response!.error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: CustomColors.lila,
-                      content: Text(
-                        response.message,
-                        style: TextStyle(
-                          color: CustomColors.azul,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(getSnackBar(response.message));
                 } else {
                   final user =
                       await LocalRepositoryImpl().saveUser(response.usuario!);
@@ -117,7 +107,7 @@ class _SignInState extends State<SignIn> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     final response =
-                        await ApiRepositoryImpl().signIn(requestSignIn);
+                        await ApiAuthRepositoryImplement().signIn(requestSignIn);
                     if (!response!.error) {
                       final user = await LocalRepositoryImpl()
                           .saveUser(response.usuario!);
@@ -125,32 +115,10 @@ class _SignInState extends State<SignIn> {
                       LocalRepositoryImpl().saveToken(user.uid);
                       Navigator.pushReplacementNamed(context, 'home');
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: CustomColors.lila,
-                          content: Text(
-                            response.message,
-                            style: TextStyle(
-                              color: CustomColors.azul,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(response.message));
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: CustomColors.lila,
-                        content: Text(
-                          'Rellene todos los campos',
-                          style: TextStyle(
-                            color: CustomColors.azul,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Rellene todos los campos'));
                   }
                 },
                 label: 'Iniciar',

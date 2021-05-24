@@ -52,8 +52,8 @@ class _CustomDropDownState extends State<CustomDropDown>
             ),
             child: DropdownButtonFormField(
               dropdownColor: CustomColors.azul,
-              onSaved: (_) {
-                widget.onSaved!(_dropDownvalue);
+              onSaved: (value) {
+                widget.onSaved!(value.toString());
               },
               value: _dropDownvalue,
               onChanged: (String? newValue) {

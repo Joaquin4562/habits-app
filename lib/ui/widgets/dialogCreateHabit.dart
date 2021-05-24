@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
-import 'package:habits_app/data/datasource/api_repository_impl.dart';
+import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
 import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/customDropDown.dart';
 import 'package:habits_app/ui/widgets/custom_input.dart';
 import 'package:habits_app/ui/widgets/day_button.dart';
+import 'package:habits_app/ui/widgets/snackbar.dart';
 
 class DialogCreateHabit extends StatefulWidget {
   DialogCreateHabit({Key? key}) : super(key: key);
@@ -107,6 +108,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                             label: 'Categoria.',
                             items: snapshot.data!,
                             onSaved: (value) {
+                              print(value);
                               category = value!;
                             },
                           );
@@ -210,7 +212,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
                               final res =
-                                  await ApiRepositoryImpl().saveUserHabit(
+                                  await ApiHabitRepositoryImplement().saveUserHabit(
                                 RequestSaveUserHabit(
                                   name: name,
                                   category: category,
@@ -220,16 +222,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                               );
                               Navigator.pushReplacementNamed(context, 'home');
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: CustomColors.lila,
-                                  content: Text(
-                                    res!,
-                                    style: TextStyle(
-                                      color: CustomColors.azul,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
+                                getSnackBar(res!)
                               );
                             }
                           },
@@ -269,7 +262,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
   }
 
   Future<List<String>> getCategories() async {
-    final res = await ApiRepositoryImpl().getPredeterminatedHabits();
+    final res = await ApiHabitRepositoryImplement().getPredeterminatedHabits();
     List<String> list =
         res!.docs.map<String>((element) => element.data()['nombre']).toList();
     return list;

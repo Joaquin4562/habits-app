@@ -1,18 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:habits_app/data/datasource/local_repository_impl.dart';
-import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/models/user.model.dart';
-import 'package:habits_app/domain/repository/api_repository_interface.dart';
-import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
+import 'package:habits_app/domain/repository/api_auth_repo.dart';
 import 'package:habits_app/domain/response/response_signIn.dart';
 import 'package:habits_app/domain/request/requestSignUp.dart';
 import 'package:habits_app/domain/request/requestSignIn.dart';
 import 'package:habits_app/domain/response/response_signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class ApiRepositoryImpl extends ApiRepositoryInterface {
+class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
   @override
   Future<ResponseSignIn?> signIn(RequestSignIn requestSignIn) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -144,51 +140,5 @@ class ApiRepositoryImpl extends ApiRepositoryInterface {
   Future<String?> recoveryPassword() {
     // TODO: Recovery password implementation
     throw UnimplementedError();
-  }
-
-  @override
-  Future<QuerySnapshot?> getPredeterminatedHabits() async {
-    QuerySnapshot snapshot;
-    CollectionReference habitsCollection =
-        FirebaseFirestore.instance.collection('habitos');
-    snapshot = await habitsCollection.get();
-    return snapshot;
-  }
-
-  @override
-  Future<String?> saveHabit(Habitos habito) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // TODO: save habit in the firestore with reference to User
-  }
-
-  @override
-  Future<String?> saveUserHabit(RequestSaveUserHabit habito) async {
-    try {
-      CollectionReference userCollection =
-          FirebaseFirestore.instance.collection('usuarios');
-      final uid = await LocalRepositoryImpl().getToken();
-      final userRef = userCollection.doc(uid);
-      userRef.update({
-        'habitos': FieldValue.arrayUnion([
-          {
-            'nombre': habito.name,
-            'categoria': habito.category,
-            'dias': habito.days,
-            'hora': habito.hour,
-          }
-        ]),
-      });
-      return 'Se inserto';
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  Future<List<dynamic>> getUserHabits() async {
-    final collection = FirebaseFirestore.instance.collection('usuarios');
-    final uid = await LocalRepositoryImpl().getToken();
-    final userDoc = await collection.doc(uid).get();
-    return userDoc.data()!['habitos'];
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
+import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
-import 'package:habits_app/ui/widgets/custombtn-habits.dart';
 import 'package:habits_app/ui/widgets/habitsHomeButton.dart';
+import 'package:habits_app/ui/widgets/snackbar.dart';
 
 class PredeterminatedHabits extends StatelessWidget {
   const PredeterminatedHabits({
@@ -99,6 +101,7 @@ class PredeterminatedHabits extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: habitos.length,
                   itemBuilder: (context, index) {
+                    final habito = habitos[index];
                     return BoucingWidget(
                       boucingScale: 0.2,
                       child: HabitsHomeButton(
@@ -106,10 +109,23 @@ class PredeterminatedHabits extends StatelessWidget {
                         colorText: CustomColors.blanco,
                         hourColor: Colors.deepOrangeAccent[200],
                         colorButton: color.withOpacity(0.9),
-                        label: habitos[index]['nombre'],
-                        time: habitos[index]['hora'],
+                        label: habito['nombre'],
+                        time: habito['hora'],
                         category: title,
                       ),
+                      onPress: () async {
+                        final res =
+                            await ApiHabitRepositoryImplement().saveUserHabit(
+                          RequestSaveUserHabit(
+                            name: habito['nombre'],
+                            category: title,
+                            days: habito['dias'],
+                            hour: habito['hora'],
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res!));
+                        Navigator.pushReplacementNamed(context, 'home');
+                      },
                     );
                   },
                 ),
