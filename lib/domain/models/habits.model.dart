@@ -4,7 +4,7 @@ import 'package:habits_app/customColors.dart';
 class Habitos {
   String? nombre;
   String? categoria;
-  List<String>? dias;
+  List<dynamic>? dias;
   String? hora;
 
   Habitos({this.categoria, this.dias, this.hora, this.nombre});

@@ -156,10 +156,10 @@ class _HabitsHomeButtonState extends State<HabitsHomeButton> {
               ),
             ),
             Positioned(
-              bottom: -20,
+              bottom: -21,
               right: medida ? 80 : 50,
               child: Image(
-                width: medida ? 120 : 60,
+                width: medida ? 110 : 60,
                 image: AssetImage(widget.imagen),
               ),
             )

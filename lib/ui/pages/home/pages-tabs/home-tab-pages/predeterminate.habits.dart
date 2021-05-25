@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
+import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
+import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/habitInfoPage.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
+import 'package:habits_app/ui/widgets/dialogCreateHabit.dart';
 import 'package:habits_app/ui/widgets/habitsHomeButton.dart';
 import 'package:habits_app/ui/widgets/snackbar.dart';
+import 'package:habits_app/ui/widgets/utils/createRoute.dart';
 
 class PredeterminatedHabits extends StatelessWidget {
   const PredeterminatedHabits({
@@ -113,18 +117,28 @@ class PredeterminatedHabits extends StatelessWidget {
                         time: habito['hora'],
                         category: title,
                       ),
-                      onPress: () async {
-                        final res =
-                            await ApiHabitRepositoryImplement().saveUserHabit(
-                          RequestSaveUserHabit(
-                            name: habito['nombre'],
-                            category: title,
-                            days: habito['dias'],
-                            hour: habito['hora'],
-                          ),
+                      onPress: () {
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder: (
+                            context,
+                            anim1,
+                            anim2,
+                          ) {
+                            return Text('');
+                          },
+                          transitionBuilder: (context, anm1, anm2, child) {
+                            return Transform.scale(
+                              scale: anm1.value,
+                              child: DialogCreateHabit(
+                                name: habito['nombre'],
+                                category: title,
+                                dayList: habito['dias'],
+                                hour: habito['hora'],
+                              ),
+                            );
+                          },
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res!));
-                        Navigator.pushReplacementNamed(context, 'home');
                       },
                     );
                   },

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 
 class CustomDropDown extends StatefulWidget {
-  const CustomDropDown(
-      {Key? key,
-      required this.label,
-      this.controller,
-      required this.items,
-      this.onSaved})
-      : super(key: key);
+  const CustomDropDown({
+    Key? key,
+    required this.label,
+    this.controller,
+    required this.items,
+    this.onSaved,
+    this.initialValue,
+  }) : super(key: key);
   final label;
   final controller;
+  final String? initialValue;
   final List<String> items;
   final Function(String?)? onSaved;
   @override
@@ -25,7 +27,7 @@ class _CustomDropDownState extends State<CustomDropDown>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    String _dropDownvalue = widget.items.first;
+    String _dropDownvalue = widget.initialValue == null ? widget.items.first : widget.initialValue!;
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: Column(

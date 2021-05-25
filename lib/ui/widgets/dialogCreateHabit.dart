@@ -9,8 +9,17 @@ import 'package:habits_app/ui/widgets/day_button.dart';
 import 'package:habits_app/ui/widgets/snackbar.dart';
 
 class DialogCreateHabit extends StatefulWidget {
-  DialogCreateHabit({Key? key}) : super(key: key);
-
+  DialogCreateHabit({
+    Key? key,
+    this.category,
+    this.dayList,
+    this.hour,
+    this.name,
+  }) : super(key: key);
+  final String? name;
+  final List<dynamic>? dayList;
+  final String? hour;
+  final String? category;
   @override
   _DialogCreateHabitState createState() => _DialogCreateHabitState();
 }
@@ -27,19 +36,23 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
     'S',
   ];
   final activeDays = [
-    true, // domingo
+    false, // domingo
     false, // lunes
     false, // martes
-    true, // miercoles
+    false, // miercoles
     false, // jueves
-    true, // viernes
+    false, // viernes
     false, // sabado
   ];
   final _formKey = GlobalKey<FormState>();
-  String name = '';
-  String category = '';
+
   @override
   Widget build(BuildContext context) {
+    String name = widget.name == null ? '' : widget.name!;
+    if (widget.dayList != null) {
+      modifyActiveDays();
+    }
+    String category = widget.category == null ? '' : widget.category!;
     final medida = MediaQuery.of(context).size.width < 400;
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -65,6 +78,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                   ),
                   CustomInput(
                     label: 'Nombre.',
+                    initialValue: name,
                     onSaved: (value) {
                       name = value!;
                     },
@@ -107,8 +121,8 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                           return CustomDropDown(
                             label: 'Categoria.',
                             items: snapshot.data!,
+                            initialValue: widget.category,
                             onSaved: (value) {
-                              print(value);
                               category = value!;
                             },
                           );
@@ -147,7 +161,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    '${time.format(context)}',
+                                    widget.hour == null ? '${time.format(context)}' : widget.hour!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 20,
@@ -211,8 +225,8 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                           onPress: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              final res =
-                                  await ApiHabitRepositoryImplement().saveUserHabit(
+                              final res = await ApiHabitRepositoryImplement()
+                                  .saveUserHabit(
                                 RequestSaveUserHabit(
                                   name: name,
                                   category: category,
@@ -221,9 +235,8 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                 ),
                               );
                               Navigator.pushReplacementNamed(context, 'home');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                getSnackBar(res!)
-                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(getSnackBar(res!));
                             }
                           },
                           child: Text(
@@ -259,6 +272,12 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
         });
       },
     );
+  }
+
+  modifyActiveDays() {
+    widget.dayList!.asMap().forEach((index, value) {
+      activeDays[index] = value;
+    });
   }
 
   Future<List<String>> getCategories() async {

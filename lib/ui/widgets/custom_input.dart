@@ -9,12 +9,14 @@ class CustomInput extends StatelessWidget {
     this.isPassword,
     this.onSaved,
     this.validator,
+    this.initialValue = '',
   }) : super(key: key);
   final String label;
   final IconData? icono;
   final Function(String?)? onSaved;
   final FormFieldValidator<String>? validator;
   final bool? isPassword;
+  final String initialValue;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,6 +39,7 @@ class CustomInput extends StatelessWidget {
           ),
           TextFormField(
             validator: validator,
+            initialValue: initialValue,
             onSaved: (value) {
               onSaved!(value);
             },
