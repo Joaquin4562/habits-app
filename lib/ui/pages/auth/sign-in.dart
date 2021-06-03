@@ -18,17 +18,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  @override
-  void initState() {
-    LocalRepositoryImpl().clearDataInformation();
-    LocalRepositoryImpl().getToken().then((value) {
-      if (value != null) {
-        Navigator.pushReplacementNamed(context, 'home');
-      }
-    });
-
-    super.initState();
-  }
 
   final requestSignIn = RequestSignIn(password: '', email: '');
   final _formKey = GlobalKey<FormState>();

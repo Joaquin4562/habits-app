@@ -5,6 +5,7 @@ import 'package:habits_app/ui/pages/auth/sign-in.dart';
 import 'package:habits_app/ui/pages/auth/sign-up.dart';
 import 'package:habits_app/ui/pages/home/home.page.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/select-habit.dart';
+import 'package:habits_app/ui/pages/spashScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      initialRoute: 'sign-in',
+      initialRoute: 'splash',
       routes: {
         'sign-in': (_) => SignIn(),
         'sign-up': (_) => SignUp(),
+        'splash': (_) => SplashScreen(),
         'recovery': (_) => RecoveryPage(),
         'home': (_) => HomePage(),
         'create-habit': (_) => CreateHabitPage(),

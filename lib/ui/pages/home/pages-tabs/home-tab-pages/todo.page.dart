@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
 import 'package:habits_app/domain/models/event.model.dart';
-import 'package:habits_app/ui/widgets/habitsHomeButton.dart';
+import 'package:habits_app/domain/models/habits.model.dart';
+import 'package:habits_app/ui/widgets/todoItemWidget.dart';
 import 'package:intl/intl.dart';
 
 class TodoList extends StatefulWidget {
@@ -23,43 +25,7 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     final today = DateTime.now();
     final locale = Localizations.localeOf(context).toString();
-    final list = [
-      Event(
-          name: 'Salir a correr al parque',
-          category: 'Salud mental',
-          time: '4:50 pm',
-          isFinished: false),
-      Event(
-          name: 'Salir con amigos',
-          category: 'Estilo de vida',
-          time: '2:00 pm',
-          isFinished: true),
-      Event(
-          name: 'Comer mejor',
-          category: 'Alimentacion',
-          time: '4:50 pm',
-          isFinished: true),
-      Event(
-          name: 'Conocer personas nuevas en mi ciudad',
-          category: 'Salud mental',
-          time: '4:50 pm',
-          isFinished: false),
-      Event(
-          name: 'Salir a correr',
-          category: 'Salud mental',
-          time: '4:50 pm',
-          isFinished: false),
-      Event(
-          name: 'comer con mis amigos',
-          category: 'Salud mental',
-          time: '4:50 pm',
-          isFinished: true),
-      Event(
-          name: 'Salir a correr',
-          category: 'Salud mental',
-          time: '4:50 pm',
-          isFinished: false),
-    ];
+    final dayOfWeek = (today.weekday + 7) % 7;
     final _scrollController = ScrollController();
     return Scaffold(
       backgroundColor: CustomColors.azul,
@@ -151,113 +117,88 @@ class _TodoListState extends State<TodoList> {
             ),
           ),
           Expanded(
-            child: RawScrollbar(
-              controller: _scrollController,
-              radius: Radius.circular(20),
-              thumbColor: CustomColors.amarillo.withOpacity(0.5),
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: list.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          list[index].time!,
-                          style: TextStyle(
-                            color: CustomColors.blanco,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: list[index].isFinished!
-                                  ? CustomColors.nature
-                                  : CustomColors.redAccion,
-                            ),
-                            width: 10,
-                            height: 10,
-                          ),
-                        ),
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.blanco,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                list[index].name!,
-                                                style: TextStyle(
-                                                  color: CustomColors.azul,
-                                                  fontSize: 20,
-                                                ),
-                                              ),
-                                              Text(
-                                                list[index].category!,
-                                                style: TextStyle(
-                                                  color: CustomColors
-                                                      .azul.light!
-                                                      .withOpacity(0.7),
-                                                  fontStyle: FontStyle.italic,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Icon(
-                                          list[index].isFinished!
-                                              ? Icons.done
-                                              : Icons.clear,
-                                          color: list[index].isFinished!
-                                              ? CustomColors.nature
-                                              : CustomColors.redAccion,
-                                          size: 40,
-                                        )
-                                      ],
-                                    ),
-                                  ),
+            child: FutureBuilder<List>(
+                future:
+                    ApiHabitRepositoryImplement().getToDoListHabits(dayOfWeek),
+                builder: (context, snapshot) {
+                  final habits = snapshot.data;
+                  if (snapshot.connectionState != ConnectionState.waiting) {
+                    if (snapshot.hasData) {
+                      return RawScrollbar(
+                        controller: _scrollController,
+                        radius: Radius.circular(20),
+                        thumbColor: CustomColors.amarillo.withOpacity(0.5),
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: habits!.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final habit = habits[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: TodoItemWidget(
+                                item: Habitos(
+                                  categoria: habit['categoria'],
+                                  dias: habit['dias'],
+                                  hora: habit['hora'],
+                                  nombre: habit['nombre'],
+                                  isFinished: habit['finalizada'],
                                 ),
                               ),
-                              Positioned(
-                                bottom: -20,
-                                right: 60,
-                                child: Image(
-                                  image: AssetImage('assets/img/alimentacion.png'),
-                                  width: 60,
-                                ),
-                              )
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+                      );
+                    } else {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'No hay habitos para este día 😔',
+                              style: TextStyle(
+                                color: CustomColors.blanco,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'No olvides de agregar unos cuantos',
+                              style: TextStyle(
+                                color: CustomColors.blanco,
+                                fontSize: 17,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Image(
+                              image: AssetImage('assets/img/estilo.png'),
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              color: CustomColors.morado,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Cargando habitos...',
+                            style: TextStyle(
+                              color: CustomColors.blanco,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          CircularProgressIndicator(),
+                        ],
+                      ),
+                    );
+                  }
+                }),
           ),
         ],
       ),

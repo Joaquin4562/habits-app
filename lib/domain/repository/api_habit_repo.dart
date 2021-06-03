@@ -6,4 +6,5 @@ abstract class ApiHabitRepositoryInterface {
   Future<String?> saveHabit(RequestSaveUserHabit habito);
   Future<String?> saveUserHabit(RequestSaveUserHabit habito);
   Future<List<dynamic>> getUserHabits();
+  Future<List<dynamic>> getToDoListHabits(int today);
 }
