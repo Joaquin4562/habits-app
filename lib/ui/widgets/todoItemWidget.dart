@@ -13,7 +13,7 @@ class TodoItemWidget extends StatelessWidget {
         Container(
           width: 85,
           child: Text(
-            item.hora!,
+            item.hora,
             style: TextStyle(
               color: CustomColors.blanco,
               fontSize: 20,
@@ -25,7 +25,7 @@ class TodoItemWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: item.isFinished!
+              color: item.isFinished
                   ? CustomColors.nature
                   : CustomColors.redAccion,
             ),
@@ -53,14 +53,14 @@ class TodoItemWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.nombre!,
+                                item.nombre,
                                 style: TextStyle(
                                   color: CustomColors.azul,
                                   fontSize: 20,
                                 ),
                               ),
                               Text(
-                                item.categoria!,
+                                item.categoria,
                                 style: TextStyle(
                                   color:
                                       CustomColors.azul.light!.withOpacity(0.7),
@@ -73,8 +73,8 @@ class TodoItemWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Icon(
-                          item.isFinished! ? Icons.done : Icons.clear,
-                          color: item.isFinished!
+                          item.isFinished ? Icons.done : Icons.clear,
+                          color: item.isFinished
                               ? CustomColors.nature
                               : CustomColors.redAccion,
                           size: 40,

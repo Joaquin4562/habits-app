@@ -18,6 +18,9 @@ dependencies:
   shared_preferences:
   table_calendar: ^3.0.0
   validators:
+  firebase_messaging: ^10.0.1
+  flutter_local_notifications: ^6.0.0
+  dio:
 
 dev_dependencies:
   flutter_test:

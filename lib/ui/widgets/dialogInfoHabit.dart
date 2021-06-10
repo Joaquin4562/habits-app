@@ -37,7 +37,7 @@ class DialogInfoHabit extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                habit.nombre!,
+                habit.nombre,
                 style: TextStyle(
                   color: CustomColors.azul,
                   fontSize: 30,
@@ -55,7 +55,7 @@ class DialogInfoHabit extends StatelessWidget {
                     ),
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      habit.categoria!,
+                      habit.categoria,
                       style: TextStyle(
                         color: CustomColors.blanco,
                         fontSize: 20,
@@ -64,7 +64,7 @@ class DialogInfoHabit extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    habit.hora!,
+                    habit.hora,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -80,7 +80,7 @@ class DialogInfoHabit extends StatelessWidget {
                     7,
                     (index) => DayButton(
                       label: daysWeek[index],
-                      active: habit.dias![index],
+                      active: habit.dias[index],
                     ),
                   ),
                 ),

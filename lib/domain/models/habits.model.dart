@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Habitos {
-  String? nombre;
-  String? categoria;
-  List<dynamic>? dias;
-  String? hora;
-  bool? isFinished;
-  Habitos({this.categoria, this.dias, this.hora, this.nombre, this.isFinished});
+  String nombre;
+  String categoria;
+  List<dynamic> dias;
+  String hora;
+  bool isFinished;
+  Habitos({
+    required this.categoria,
+    required this.dias,
+    required this.hora,
+    required this.nombre,
+    required this.isFinished,
+  });
 }
 
 class Categories {
