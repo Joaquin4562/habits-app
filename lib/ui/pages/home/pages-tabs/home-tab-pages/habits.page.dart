@@ -35,8 +35,8 @@ class _HabitsPageState extends State<HabitsPage> {
           future: ApiHabitRepositoryImplement().getUserHabits(),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.waiting) {
-              if (snapshot.hasData) {
-                final data = snapshot.data!;
+              final data = snapshot.data!;
+              if (data.length > 0) {
                 return RawScrollbar(
                   isAlwaysShown: true,
                   controller: _scrollController,
@@ -65,7 +65,7 @@ class _HabitsPageState extends State<HabitsPage> {
                                       dias: item['dias'],
                                       hora: item['hora'],
                                       nombre: item['nombre'],
-                                      isFinished: item['finalizado'],
+                                      isFinished: item['finalizada'],
                                     ),
                                   ),
                                 );

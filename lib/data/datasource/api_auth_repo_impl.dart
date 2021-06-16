@@ -35,7 +35,6 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
       );
     } on FirebaseAuthException catch (e) {
       String message = 'NADA';
-      print(e.code);
       switch (e.code) {
         case 'wrong-password':
           message = 'Contraseña incorrecta';
@@ -70,11 +69,9 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         'edad': requestSignUp.edad,
         'correo': requestSignUp.correo,
         'sexo': requestSignUp.sexo,
-        'habitos': [],
       });
       return ResponseSignUp(false, 'Usuario registrado');
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       String msg = 'Error no encontrado';
       switch (e.code) {
         case 'weak-password':
@@ -125,7 +122,6 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
           'correo': usuario['email'],
           'edad': '',
           'sexo': '',
-          'habitos': [],
         };
         collection.doc(user.user!.uid).set(userData).then((value) {
           return ResponseSignIn(error: false, message: 'Usuario logeado');

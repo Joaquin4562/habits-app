@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
 import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
 import 'package:habits_app/ui/widgets/day_button.dart';
@@ -85,11 +86,91 @@ class DialogInfoHabit extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  '¿Terminaste?',
+                  style: TextStyle(
+                    color: CustomColors.azul,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              habit.isFinished
+                  ? Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors.nature,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Terminado',
+                            style: TextStyle(
+                              color: CustomColors.blanco,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        BoucingWidget(
+                          onPress: () async {
+                            await ApiHabitRepositoryImplement()
+                                .updateHabitUser(habit.nombre);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: CustomColors.azul,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.done,
+                                color: CustomColors.nature,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                        ),
+                        BoucingWidget(
+                          onPress: () => Navigator.pop(context),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: CustomColors.azul,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.close,
+                                color: CustomColors.redAccion,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+              const SizedBox(height: 20),
               BoucingWidget(
-                onPress: () {
-                  Navigator.pop(context);
-                },
+                onPress: () => Navigator.pop(context),
                 boucingScale: 0.8,
                 child: Container(
                   decoration: BoxDecoration(
@@ -97,10 +178,11 @@ class DialogInfoHabit extends StatelessWidget {
                       color: CustomColors.azul,
                       width: 3,
                     ),
-                    borderRadius: BorderRadius.circular(30)
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 10.0, left: 20.0, right: 10.0, bottom: 10.0),
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 20.0, right: 10.0, bottom: 10.0),
                     child: Center(
                       child: Text(
                         'Cerrar',
@@ -112,7 +194,7 @@ class DialogInfoHabit extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

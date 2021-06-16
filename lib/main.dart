@@ -5,6 +5,7 @@ import 'package:habits_app/data/datasource/api_fcm_implements.dart';
 import 'package:habits_app/data/services/localNotificationsService.dart';
 import 'package:habits_app/ui/pages/auth/recovery.dart';
 import 'package:habits_app/ui/pages/auth/sign-in.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:habits_app/ui/pages/auth/sign-up.dart';
 import 'package:habits_app/ui/pages/home/home.page.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/select-habit.dart';
@@ -18,7 +19,6 @@ void main() async{
   print(' TOKEN IS ${await FirebaseMessaging.instance.getToken()}');
   FirebaseMessaging.onBackgroundMessage(_hadleMessage);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('notificacion entrante');
     LocalNotificationsService().showNotification(message);
   });
   runApp(MyApp());
@@ -28,8 +28,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('es', 'MX'),
+      ],
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Habits app',
       initialRoute: 'splash',
       routes: {
         'sign-in': (_) => SignIn(),

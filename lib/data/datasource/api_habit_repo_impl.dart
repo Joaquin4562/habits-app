@@ -1,7 +1,5 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:habits_app/data/datasource/local_repository_impl.dart';
-import 'package:habits_app/domain/models/event.model.dart';
 import 'package:habits_app/domain/repository/api_habit_repo.dart';
 import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 
@@ -24,7 +22,7 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
       CollectionReference habitCollection =
           FirebaseFirestore.instance.collection('habitos');
       final uid =
-          res!.docs.firstWhere((e) => e.data()['nombre'] == habito.category);
+          res!.docs.firstWhere((e) => e['nombre'] == habito.category);
       final userRef = habitCollection.doc(uid.id);
       userRef.update({
         'habitos-predeterminados': FieldValue.arrayUnion([
@@ -49,16 +47,13 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
           FirebaseFirestore.instance.collection('usuarios');
       final uid = await LocalRepositoryImpl().getToken();
       final userRef = userCollection.doc(uid);
-      userRef.update({
-        'habitos': FieldValue.arrayUnion([
-          {
-            'nombre': habito.name,
-            'categoria': habito.category,
-            'dias': habito.days,
-            'hora': habito.hour,
-            'finalizada': false,
-          }
-        ]),
+      final habitsCollection = userRef.collection('habitos');
+      await habitsCollection.doc(habito.name).set({
+        'nombre': habito.name,
+        'categoria': habito.category,
+        'dias': habito.days,
+        'hora': habito.hour,
+        'finalizada': false,
       });
       return 'Se inserto';
     } catch (e) {
@@ -70,17 +65,20 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
   Future<List<dynamic>> getUserHabits() async {
     final collection = FirebaseFirestore.instance.collection('usuarios');
     final uid = await LocalRepositoryImpl().getToken();
-    final userDoc = await collection.doc(uid).get();
-    return userDoc.data()!['habitos'];
+    final habitsUser = await collection.doc(uid).collection('habitos').get();
+    return habitsUser.docs;
   }
 
   @override
   Future<List<dynamic>> getToDoListHabits(int today) async {
     final uid = await LocalRepositoryImpl().getToken();
-    final userDocument =
-        await FirebaseFirestore.instance.collection('usuarios').doc(uid).get();
+    final habitsUser = await FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(uid)
+        .collection('habitos')
+        .get();
     List lista = [];
-    final List habitList = userDocument.data()!['habitos'];
+    final List habitList = habitsUser.docs;
     habitList.forEach((element) {
       final List listOfDays = element['dias'];
       listOfDays.asMap().forEach((index, value) {
@@ -92,5 +90,22 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
       });
     });
     return lista;
+  }
+
+  @override
+  Future<void> updateHabitUser(String nameHabit) async {
+    try {
+      final uid = await LocalRepositoryImpl().getToken();
+      await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(uid)
+          .collection('habitos')
+          .doc(nameHabit)
+          .update({
+        'finalizada': true,
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

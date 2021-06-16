@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/ui/widgets/circleNumberWidget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTab extends StatelessWidget {
@@ -66,11 +67,48 @@ class CalendarTab extends StatelessWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: CustomColors.blanco,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    )),
+                  color: CustomColors.blanco,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 15.0,
+                    left: 7.0,
+                    right: 7.0,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'Racha de habitos',
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          CircleNumberWidget(
+                            number: '10',
+                            colorText: CustomColors.blanco,
+                            backgroundColor: CustomColors.azul,
+                            borderColor: CustomColors.blanco,
+                            shadowColor1: Colors.black38,
+                            shadowColor2: CustomColors.blanco,
+                          )
+                        ],
+                      ),
+                      Image(
+                        image: AssetImage('assets/img/new.png'),
+                        width: MediaQuery.of(context).size.width * 0.6,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

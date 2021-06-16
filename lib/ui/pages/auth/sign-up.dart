@@ -35,7 +35,6 @@ class _SignUpState extends State<SignUp> {
         key: _formKey,
         child: ListView(
           physics: BouncingScrollPhysics(),
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
             Align(
               alignment: Alignment.centerLeft,

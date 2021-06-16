@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:habits_app/customColors.dart';
 
 class CustomBtnHabits extends StatefulWidget {
   const CustomBtnHabits({

@@ -26,7 +26,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.azul.dark,
+        backgroundColor: Colors.transparent,
         title: Text(
           'Habitos',
           style: TextStyle(

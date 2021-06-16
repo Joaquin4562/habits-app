@@ -283,7 +283,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
   Future<List<String>> getCategories() async {
     final res = await ApiHabitRepositoryImplement().getPredeterminatedHabits();
     List<String> list =
-        res!.docs.map<String>((element) => element.data()['nombre']).toList();
+        res!.docs.map<String>((element) => element['nombre']).toList();
     return list;
   }
 }

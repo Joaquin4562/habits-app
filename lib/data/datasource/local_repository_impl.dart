@@ -1,4 +1,3 @@
-import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/models/user.model.dart';
 import 'package:habits_app/domain/repository/local_repository_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';

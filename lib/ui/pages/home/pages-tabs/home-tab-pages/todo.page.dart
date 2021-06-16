@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
-import 'package:habits_app/domain/models/event.model.dart';
 import 'package:habits_app/domain/models/habits.model.dart';
+import 'package:habits_app/ui/widgets/circleNumberWidget.dart';
 import 'package:habits_app/ui/widgets/todoItemWidget.dart';
 import 'package:intl/intl.dart';
 
@@ -25,6 +25,7 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     final today = DateTime.now();
     final locale = Localizations.localeOf(context).toString();
+    print(locale);
     final dayOfWeek = (today.weekday + 7) % 7;
     final _scrollController = ScrollController();
     return Scaffold(
@@ -64,55 +65,14 @@ class _TodoListState extends State<TodoList> {
                     ),
                   ],
                 ),
-                Stack(
-                  children: [
-                    Container(
-                      height: 120,
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: CustomColors.azul,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: CustomColors.azul.dark!.withOpacity(0.5),
-                            offset: Offset(5.0, 5.0),
-                            blurRadius: 7.0,
-                          ),
-                          BoxShadow(
-                            color: CustomColors.blanco.withOpacity(0.06),
-                            offset: Offset(-5.0, -5.0),
-                            blurRadius: 7.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          width: 95,
-                          height: 95,
-                          decoration: BoxDecoration(
-                            color: CustomColors.azul.dark,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              DateFormat('d').format(today),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: CustomColors.blanco,
-                                fontSize: 45,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                CircleNumberWidget(
+                  number: DateFormat('d').format(today),
+                  borderColor: CustomColors.azul,
+                  backgroundColor: CustomColors.azul.dark,
+                  shadowColor1: CustomColors.azul.dark,
+                  shadowColor2: CustomColors.blanco,
+                  colorText: CustomColors.blanco,
+                ),
               ],
             ),
           ),
@@ -123,14 +83,14 @@ class _TodoListState extends State<TodoList> {
                 builder: (context, snapshot) {
                   final habits = snapshot.data;
                   if (snapshot.connectionState != ConnectionState.waiting) {
-                    if (snapshot.hasData) {
+                    if (habits!.length > 0) {
                       return RawScrollbar(
                         controller: _scrollController,
                         radius: Radius.circular(20),
                         thumbColor: CustomColors.amarillo.withOpacity(0.5),
                         child: ListView.builder(
                           controller: _scrollController,
-                          itemCount: habits!.length,
+                          itemCount: habits.length,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             final habit = habits[index];
