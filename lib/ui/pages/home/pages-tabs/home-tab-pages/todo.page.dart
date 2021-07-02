@@ -34,9 +34,10 @@ class _TodoListState extends State<TodoList> {
         children: [
           Padding(
             padding: const EdgeInsets.only(
-              top: 30.0,
+              top: 20.0,
               right: 50.0,
               left: 20.0,
+              bottom: 10.0
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

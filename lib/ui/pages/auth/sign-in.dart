@@ -18,9 +18,9 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
   final requestSignIn = RequestSignIn(password: '', email: '');
   final _formKey = GlobalKey<FormState>();
+  bool _disabled = false;
   @override
   Widget build(BuildContext context) {
     final medida = (MediaQuery.of(context).size.width > 400);
@@ -58,9 +58,11 @@ class _SignInState extends State<SignIn> {
             ),
             ButtonGoogleSignIn(
               onPressed: () async {
-                final response = await ApiAuthRepositoryImplement().signUpWithGoogle();
+                final response =
+                    await ApiAuthRepositoryImplement().signUpWithGoogle();
                 if (response!.error) {
-                  ScaffoldMessenger.of(context).showSnackBar(getSnackBar(response.message));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(getSnackBar(response.message));
                 } else {
                   final user =
                       await LocalRepositoryImpl().saveUser(response.usuario!);
@@ -92,11 +94,14 @@ class _SignInState extends State<SignIn> {
             Hero(
               tag: 'button-auth',
               child: ButtonAuth(
+                waiting: _disabled,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    final response =
-                        await ApiAuthRepositoryImplement().signIn(requestSignIn);
+                    setState(() => _disabled = true);
+                    final response = await ApiAuthRepositoryImplement()
+                        .signIn(requestSignIn);
+                    setState(() => _disabled = false);
                     if (!response!.error) {
                       final user = await LocalRepositoryImpl()
                           .saveUser(response.usuario!);
@@ -104,10 +109,12 @@ class _SignInState extends State<SignIn> {
                       LocalRepositoryImpl().saveToken(user.uid);
                       Navigator.pushReplacementNamed(context, 'home');
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(response.message));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(getSnackBar(response.message));
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Rellene todos los campos'));
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(getSnackBar('Rellene todos los campos'));
                   }
                 },
                 label: 'Iniciar',

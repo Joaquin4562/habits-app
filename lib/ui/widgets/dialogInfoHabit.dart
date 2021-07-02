@@ -126,7 +126,7 @@ class DialogInfoHabit extends StatelessWidget {
                           onPress: () async {
                             await ApiHabitRepositoryImplement()
                                 .updateHabitUser(habit.nombre);
-                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(context, 'home');
                           },
                           child: Container(
                             decoration: BoxDecoration(

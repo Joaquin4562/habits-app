@@ -41,7 +41,7 @@ class _HabitsPageState extends State<HabitsPage> {
                   isAlwaysShown: true,
                   controller: _scrollController,
                   thickness: 5,
-                  radius: Radius.circular(20),
+                  radius: const Radius.circular(20),
                   thumbColor: CustomColors.amarillo,
                   child: ListView.builder(
                     controller: _scrollController,
@@ -53,28 +53,29 @@ class _HabitsPageState extends State<HabitsPage> {
                         boucingScale: 0.2,
                         onPress: () {
                           showGeneralDialog(
-                              context: context,
-                              pageBuilder: (context, anim1, anim2) => Text(''),
-                              transitionBuilder:
-                                  (context, anim1, anim2, child) {
-                                return Transform.scale(
-                                  scale: anim1.value,
-                                  child: DialogInfoHabit(
-                                    habit: Habitos(
-                                      categoria: item['categoria'],
-                                      dias: item['dias'],
-                                      hora: item['hora'],
-                                      nombre: item['nombre'],
-                                      isFinished: item['finalizada'],
-                                    ),
+                            context: context,
+                            pageBuilder: (context, anim1, anim2) =>
+                                const Text(''),
+                            transitionBuilder: (context, anim1, anim2, child) {
+                              return Transform.scale(
+                                scale: anim1.value,
+                                child: DialogInfoHabit(
+                                  habit: Habitos(
+                                    categoria: item['categoria'],
+                                    dias: item['dias'],
+                                    hora: item['hora'],
+                                    nombre: item['nombre'],
+                                    isFinished: item['finalizada'],
                                   ),
-                                );
-                              });
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: HabitsHomeButton(
                           pRight: 40.0,
                           pLeft: 40.0,
-                          pTop: 20.0,
+                          pTop: 10.0,
                           pBottom: 10.0,
                           label: item['nombre'],
                           category: item['categoria'],

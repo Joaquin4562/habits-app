@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/ui/widgets/circleNumberWidget.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-class CalendarTab extends StatelessWidget {
+class CalendarTab extends StatefulWidget {
   const CalendarTab({Key? key}) : super(key: key);
 
+  @override
+  _CalendarTabState createState() => _CalendarTabState();
+}
+
+class _CalendarTabState extends State<CalendarTab> {
+  DateTime _currentDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,55 +20,48 @@ class CalendarTab extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: DateTime.now(),
-              headerStyle: HeaderStyle(
-                headerPadding: EdgeInsets.all(20),
-                rightChevronIcon: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: CustomColors.blanco,
-                ),
-                leftChevronIcon: Icon(
-                  Icons.arrow_back_ios_rounded,
-                  color: CustomColors.blanco,
-                ),
-                decoration: BoxDecoration(
-                  color: CustomColors.azul.dark,
-                ),
-                titleTextStyle: TextStyle(
-                  color: CustomColors.blanco,
-                  fontSize: 20,
-                ),
-                formatButtonTextStyle: TextStyle(
-                  color: CustomColors.blanco,
-                ),
-                titleCentered: true,
+            CalendarCarousel(
+              customGridViewPhysics: BouncingScrollPhysics(),
+              showOnlyCurrentMonthDate: true,
+              pageScrollPhysics: NeverScrollableScrollPhysics(),
+              headerTextStyle: TextStyle(
+                color: CustomColors.blanco,
+                fontSize: 20.0,
               ),
-              daysOfWeekHeight: 60,
-              daysOfWeekStyle: DaysOfWeekStyle(
-                decoration: BoxDecoration(
-                  color: CustomColors.azul.dark,
-                ),
-                weekdayStyle: TextStyle(
-                  color: CustomColors.blanco,
-                  fontSize: 20,
-                ),
-                weekendStyle: TextStyle(
-                  color: CustomColors.lila,
-                  fontSize: 20,
-                ),
+              iconColor: CustomColors.blanco,
+              locale: Localizations.localeOf(context).languageCode,
+              height: 450.0,
+              weekFormat: false,
+              weekdayTextStyle: TextStyle(
+                fontSize: 20,
+                color: CustomColors.lila,
               ),
-              calendarStyle: CalendarStyle(
-                cellMargin: EdgeInsets.all(0),
-                rowDecoration: BoxDecoration(
-                  color: CustomColors.azul,
-                ),
-                weekendTextStyle: TextStyle(color: CustomColors.lila),
-                outsideTextStyle: TextStyle(color: CustomColors.blanco),
-                defaultTextStyle: TextStyle(color: CustomColors.blanco),
+              daysTextStyle: TextStyle(
+                color: CustomColors.blanco,
+                fontSize: 18.0,
               ),
+              weekendTextStyle: TextStyle(
+                color: CustomColors.amarillo,
+                fontSize: 18.0,
+              ),
+              todayButtonColor: CustomColors.nature,
+              selectedDateTime: _currentDate,
+              minSelectedDate: _currentDate.subtract(const Duration(days: 360)),
+              maxSelectedDate: _currentDate.add(const Duration(days: 360)),
+              markedDatesMap: EventList(events: {
+                DateTime(2021, 06, 24): [
+                  Event(
+                    date: DateTime(2021, 06, 24),
+                    title: 'Evento X',
+                    dot: Container(
+                      color: CustomColors.redAccion,
+                      height: 5.0,
+                      width: 5.0,
+                    )
+                  )
+                ]
+              }),
+              selectedDayButtonColor: CustomColors.redAccion,
             ),
             Expanded(
               child: Container(
@@ -85,9 +85,9 @@ class CalendarTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            'Racha de habitos',
+                            'Habitos del dia',
                             style: TextStyle(
-                              fontSize: 27,
+                              fontSize: 28,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.bold,
                             ),
@@ -102,6 +102,7 @@ class CalendarTab extends StatelessWidget {
                           )
                         ],
                       ),
+                      const SizedBox(height: 20),
                       Image(
                         image: AssetImage('assets/img/new.png'),
                         width: MediaQuery.of(context).size.width * 0.6,

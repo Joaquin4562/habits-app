@@ -16,6 +16,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
+  bool _disabled = false;
   @override
   Widget build(BuildContext context) {
     final requestSignUp = RequestSignUp(
@@ -110,10 +111,13 @@ class _SignUpState extends State<SignUp> {
             Hero(
               tag: 'button-auth',
               child: ButtonAuth(
+                waiting: _disabled,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+                    setState(() => _disabled = true);
                     final response = await ApiAuthRepositoryImplement().signUp(requestSignUp);
+                    setState(() => _disabled = false);
                     if (!response!.error) {
                       Navigator.of(context).pushReplacementNamed('sign-in');
                     }

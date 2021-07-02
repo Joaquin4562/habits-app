@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:habits_app/data/datasource/api_fcm_implements.dart';
 import 'package:habits_app/data/datasource/local_repository_impl.dart';
+import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/repository/api_habit_repo.dart';
 import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
 
@@ -21,8 +23,7 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
           await ApiHabitRepositoryImplement().getPredeterminatedHabits();
       CollectionReference habitCollection =
           FirebaseFirestore.instance.collection('habitos');
-      final uid =
-          res!.docs.firstWhere((e) => e['nombre'] == habito.category);
+      final uid = res!.docs.firstWhere((e) => e['nombre'] == habito.category);
       final userRef = habitCollection.doc(uid.id);
       userRef.update({
         'habitos-predeterminados': FieldValue.arrayUnion([
@@ -55,6 +56,15 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
         'hora': habito.hour,
         'finalizada': false,
       });
+      await ApiFCMImplements().sendNotification(
+        Habitos(
+          categoria: habito.category,
+          dias: habito.days,
+          hora: habito.hour,
+          nombre: habito.name,
+          isFinished: false,
+        ),
+      );
       return 'Se inserto';
     } catch (e) {
       print(e);

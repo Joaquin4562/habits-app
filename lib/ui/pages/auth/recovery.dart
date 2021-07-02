@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/ui/widgets/btn-auth.dart';
@@ -5,9 +7,10 @@ import 'package:habits_app/ui/widgets/custom_input.dart';
 
 class RecoveryPage extends StatelessWidget {
   const RecoveryPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
     return Scaffold(
       backgroundColor: CustomColors.azul.dark,
       appBar: AppBar(

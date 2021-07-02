@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,10 @@ import 'package:habits_app/ui/pages/spashScreen.dart';
 Future <void> _hadleMessage(RemoteMessage message) async {
   ApiFCMImplements().messagingBackgroundHandle(message);
 }
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await AndroidAlarmManager.initialize();
   print(' TOKEN IS ${await FirebaseMessaging.instance.getToken()}');
   FirebaseMessaging.onBackgroundMessage(_hadleMessage);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {

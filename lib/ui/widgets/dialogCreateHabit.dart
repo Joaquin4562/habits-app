@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:habits_app/customColors.dart';
 import 'package:habits_app/data/datasource/api_habit_repo_impl.dart';
 import 'package:habits_app/domain/request/requestSaveUserHabit.dart';
@@ -161,7 +162,9 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    widget.hour == null ? '${time.format(context)}' : widget.hour!,
+                                    widget.hour == null
+                                        ? '${DateFormat.jm().format(DateTime(0,0,0,time.hour, time.minute))}'
+                                        : widget.hour!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 20,
@@ -176,24 +179,35 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                   helpText: 'Ingresa la hora',
                                   cancelText: 'CANCELAR',
                                   confirmText: 'INSERTAR',
-                                  initialEntryMode: TimePickerEntryMode.input,
                                   initialTime: TimeOfDay.now(),
                                   builder: (context, child) {
-                                    return Theme(
-                                      data: ThemeData.light().copyWith(
-                                        colorScheme: ColorScheme.light(
-                                          primary: CustomColors.azul,
-                                          onSurface: CustomColors.azul,
+                                    final mediaQueryWrapper = MediaQuery(
+                                      data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: false),
+                                      child: Theme(
+                                        data: ThemeData.light().copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: CustomColors.azul,
+                                            onSurface: CustomColors.azul,
+                                          ),
                                         ),
+                                        child: child!,
                                       ),
-                                      child: child!,
                                     );
+                                    if (Localizations.localeOf(context)
+                                            .languageCode ==
+                                        'es') {
+                                      return Localizations.override(
+                                        context: context,
+                                        locale: Locale('es', 'US'),
+                                        child: mediaQueryWrapper,
+                                      );
+                                    }
+                                    return mediaQueryWrapper;
                                   },
                                 ).then((value) {
                                   if (value != null) {
-                                    setState(() {
-                                      time = value;
-                                    });
+                                    setState(() => time = value);
                                   }
                                 });
                               }),
@@ -231,7 +245,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                   name: name,
                                   category: category,
                                   days: activeDays,
-                                  hour: time.format(context),
+                                  hour: DateFormat.jm().format(DateTime(0,0,0,time.hour, time.minute)),
                                 ),
                               );
                               Navigator.pushReplacementNamed(context, 'home');

@@ -18,11 +18,12 @@ dependencies:
   firebase_auth:
   google_sign_in:
   shared_preferences:
-  table_calendar: ^3.0.0
   validators:
   firebase_messaging: ^10.0.1
   flutter_local_notifications: ^6.0.0
   dio:
+  android_alarm_manager: ^2.0.2
+  flutter_calendar_carousel: ^2.0.1
 
 dev_dependencies:
   flutter_test:
