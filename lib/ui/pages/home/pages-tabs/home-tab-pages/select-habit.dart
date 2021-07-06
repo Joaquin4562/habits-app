@@ -28,7 +28,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          'Habitos',
+          'Hábitos',
           style: TextStyle(
             color: CustomColors.lila,
             fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
               boucingScale: 0.10,
               child: CustomBtnHabits(
                 icono: Icons.add_circle_outline,
-                label: 'Crear nuevo habito',
+                label: 'Crear nuevo hábito',
                 colorIcon: CustomColors.azul,
                 colorText: CustomColors.azul,
                 colorButton: CustomColors.blanco,

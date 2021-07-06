@@ -114,8 +114,35 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
           .update({
         'finalizada': true,
       });
+      await this.incrementStreak();
     } catch (e) {
       print(e);
+    }
+  }
+
+  @override
+  Future<void> incrementStreak() async {
+    try {
+      final userCollection = FirebaseFirestore.instance.collection('usuarios');
+      final uid = await LocalRepositoryImpl().getToken();
+      await userCollection.doc(uid).update({
+        'racha': FieldValue.increment(1),
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Future<int> getStreakUser() async {
+    try {
+      final userColletion = FirebaseFirestore.instance.collection('usuarios');
+      final uid = await LocalRepositoryImpl().getToken();
+      final userDocument = await userColletion.doc(uid).get();
+      return userDocument.get('racha');
+    } catch (e) {
+      print(e);
+      return 0;
     }
   }
 }

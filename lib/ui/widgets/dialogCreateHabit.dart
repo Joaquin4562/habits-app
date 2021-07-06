@@ -70,7 +70,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
               child: ListBody(
                 children: [
                   Text(
-                    'Crea un habito',
+                    'Crea un hábito',
                     style: TextStyle(
                       color: CustomColors.blanco,
                       fontSize: medida ? 35 : 45,

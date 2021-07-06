@@ -97,7 +97,7 @@ class _HabitsPageState extends State<HabitsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Cargando habitos',
+                      'Cargando hábitos',
                       style: TextStyle(
                         color: CustomColors.blanco,
                         fontStyle: FontStyle.italic,
@@ -118,7 +118,7 @@ class _HabitsPageState extends State<HabitsPage> {
         boucingScale: 0.10,
         child: CustomBtnHabits(
           icono: Icons.add_circle_outline,
-          label: 'Añadir habito',
+          label: 'Añadir hábito',
           colorIcon: CustomColors.azul,
           colorText: CustomColors.azul,
           colorButton: CustomColors.blanco,

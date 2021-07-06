@@ -5,6 +5,7 @@ class Usuario {
   String nombreCompeto;
   String edad;
   String sexo;
+  int racha;
 
   Usuario({
     required this.uid,
@@ -13,5 +14,6 @@ class Usuario {
     required this.edad,
     required this.nombreCompeto,
     required this.sexo,
+    required this.racha,
   });
 }

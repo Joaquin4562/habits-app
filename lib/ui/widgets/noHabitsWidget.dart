@@ -11,7 +11,7 @@ class NoHabitsWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            'No hay habitos',
+            'No hay hábitos 😕',
             style: TextStyle(
               color: CustomColors.blanco,
               fontStyle: FontStyle.italic,

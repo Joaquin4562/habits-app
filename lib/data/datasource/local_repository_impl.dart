@@ -8,6 +8,7 @@ class LocalRepositoryImpl extends LocalRepositoryInterface {
   static const _preferences_edad = 'ADGE';
   static const _preferences_sexo = 'SEXO';
   static const _preferences_nombre = 'NAME';
+  static const _preferences_rahca = 'RACHA';
   static const _preferences_UID = 'UID';
 
   @override
@@ -32,6 +33,7 @@ class LocalRepositoryImpl extends LocalRepositoryInterface {
       correo: sharedPreferences.getString(_preferences_correo)!,
       nombreCompeto: sharedPreferences.getString(_preferences_nombre)!,
       constrasena: '',
+      racha: sharedPreferences.getInt(_preferences_rahca)!,
     );
   }
 
@@ -43,6 +45,7 @@ class LocalRepositoryImpl extends LocalRepositoryInterface {
     sharedPreferences.setString(_preferences_edad, usuario.edad);
     sharedPreferences.setString(_preferences_sexo, usuario.sexo);
     sharedPreferences.setString(_preferences_correo, usuario.correo);
+    sharedPreferences.setInt(_preferences_rahca, usuario.racha);
     return usuario;
   }
 

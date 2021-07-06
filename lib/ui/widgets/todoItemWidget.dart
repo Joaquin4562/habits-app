@@ -24,13 +24,13 @@ class TodoItemWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10.0),
           child: Container(
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(10),
               color: item.isFinished
                   ? CustomColors.nature
                   : CustomColors.redAccion,
             ),
             width: 10,
-            height: 10,
+            height: 60,
           ),
         ),
         Expanded(

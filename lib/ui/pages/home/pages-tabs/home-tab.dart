@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:habits_app/customColors.dart';
+import 'package:habits_app/data/datasource/api_auth_repo_impl.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/habits.page.dart';
 import 'package:habits_app/ui/pages/home/pages-tabs/home-tab-pages/todo.page.dart';
 import 'package:habits_app/ui/widgets/boucing.dart';
@@ -50,6 +52,22 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                 ),
+                Positioned(
+                  top: 0,
+                  left: size.width * 0.85,
+                  bottom: 0,
+                  child: IconButton(
+                    onPressed: () async {
+                      await ApiAuthRepositoryImplement().signOut();
+                      Navigator.pushReplacementNamed(context, 'sign-in');
+                    },
+                    icon: Icon(
+                      Icons.exit_to_app_rounded,
+                      color: CustomColors.lila,
+                      size: 40,
+                    ),
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -60,7 +78,7 @@ class _HomeTabState extends State<HomeTab> {
                         right: 90,
                       ),
                       child: Text(
-                        'Crea lo mejor de ti, estos son tus habitos',
+                        'Crea lo mejor de ti, estos son tus hábitos',
                         style: TextStyle(
                           color: CustomColors.blanco,
                           fontSize: medida ? 35 : 25,
@@ -83,7 +101,7 @@ class _HomeTabState extends State<HomeTab> {
                             },
                             boucingScale: 0.5,
                             child: Text(
-                              'Habitos',
+                              'Hábitos',
                               style: TextStyle(
                                 color: (_selectedIndex == 0)
                                     ? CustomColors.lila

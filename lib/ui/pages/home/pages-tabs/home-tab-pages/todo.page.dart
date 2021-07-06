@@ -116,7 +116,7 @@ class _TodoListState extends State<TodoList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'No hay habitos para este día 😔',
+                              'No hay hábitos para este día 😔',
                               style: TextStyle(
                                 color: CustomColors.blanco,
                                 fontSize: 25,

@@ -8,4 +8,6 @@ abstract class ApiHabitRepositoryInterface {
   Future<List<dynamic>> getUserHabits();
   Future<List<dynamic>> getToDoListHabits(int today);
   Future<void> updateHabitUser(String nameHabit);
+  Future<void> incrementStreak();
+  Future<int> getStreakUser();
 }

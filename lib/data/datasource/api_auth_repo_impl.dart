@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:habits_app/data/datasource/local_repository_impl.dart';
 import 'package:habits_app/domain/models/user.model.dart';
 import 'package:habits_app/domain/repository/api_auth_repo.dart';
 import 'package:habits_app/domain/response/response_signIn.dart';
@@ -25,13 +26,13 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         message: 'Usuario ${userData!['nombre_completo']} Logeado',
         error: false,
         usuario: Usuario(
-          uid: userCredencials.user!.uid,
-          constrasena: '',
-          correo: userData['correo'],
-          edad: userData['edad'],
-          nombreCompeto: userData['nombre_completo'],
-          sexo: userData['sexo'],
-        ),
+            uid: userCredencials.user!.uid,
+            constrasena: '',
+            correo: userData['correo'],
+            edad: userData['edad'],
+            nombreCompeto: userData['nombre_completo'],
+            sexo: userData['sexo'],
+            racha: userData['racha']),
       );
     } on FirebaseAuthException catch (e) {
       String message = 'NADA';
@@ -53,7 +54,8 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
   @override
   Future<void> signOut() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    auth.signOut();
+    await auth.signOut();
+    await LocalRepositoryImpl().clearDataInformation();
   }
 
   @override
@@ -69,6 +71,8 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         'edad': requestSignUp.edad,
         'correo': requestSignUp.correo,
         'sexo': requestSignUp.sexo,
+        'racha': 0,
+        'enRacha': false,
       });
       return ResponseSignUp(false, 'Usuario registrado');
     } on FirebaseAuthException catch (e) {
@@ -112,6 +116,7 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
             edad: userData['edad'],
             nombreCompeto: userData['nombre_completo'],
             sexo: userData['sexo'],
+            racha: userData['racha'],
           ),
         );
       } else {
@@ -122,6 +127,8 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
           'correo': usuario['email'],
           'edad': '',
           'sexo': '',
+          'racha': 0,
+          'enRacha': false,
         };
         collection.doc(user.user!.uid).set(userData).then((value) {
           return ResponseSignIn(error: false, message: 'Usuario logeado');
@@ -133,8 +140,18 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
   }
 
   @override
-  Future<String?> recoveryPassword() {
-    // TODO: Recovery password implementation
-    throw UnimplementedError();
+  Future<String?> recoveryPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return 'Se envio el correo correctamente, verificalo';
+    } on FirebaseAuthException catch (e) {
+      String msg = 'Ocurrio un error ${e.code}';
+      switch (e.code) {
+        case 'user-not-found':
+          msg = 'Usuario no encontrado';
+          break;
+      }
+      return msg;
+    }
   }
 }
