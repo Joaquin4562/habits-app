@@ -60,7 +60,8 @@ class _SignInState extends State<SignIn> {
               onPressed: () async {
                 final response =
                     await ApiAuthRepositoryImplement().signUpWithGoogle();
-                if (response!.error) {
+                    print(response.message);
+                if (response.error) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(getSnackBar(response.message));
                 } else {

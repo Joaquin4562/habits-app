@@ -16,11 +16,11 @@ class _SplashScreenState extends State<SplashScreen> {
     LocalRepositoryImpl().getToken().then((value) {
       if (value != null) {
       Future.delayed(Duration(milliseconds: 1500)).then(
-        (value) => Navigator.pushNamed(context, 'home'),
+        (value) => Navigator.pushReplacementNamed(context, 'home'),
       );
     } else {
       Future.delayed(Duration(milliseconds: 1500)).then(
-        (value) => Navigator.pushNamed(context, 'sign-in'),
+        (value) => Navigator.pushReplacementNamed(context, 'sign-in'),
       );
     }
     });

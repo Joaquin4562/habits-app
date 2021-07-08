@@ -26,13 +26,14 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         message: 'Usuario ${userData!['nombre_completo']} Logeado',
         error: false,
         usuario: Usuario(
-            uid: userCredencials.user!.uid,
-            constrasena: '',
-            correo: userData['correo'],
-            edad: userData['edad'],
-            nombreCompeto: userData['nombre_completo'],
-            sexo: userData['sexo'],
-            racha: userData['racha']),
+          uid: userCredencials.user!.uid,
+          constrasena: '',
+          correo: userData['correo'],
+          edad: userData['edad'],
+          nombreCompeto: userData['nombre_completo'],
+          sexo: userData['sexo'],
+          racha: userData['racha'],
+        ),
       );
     } on FirebaseAuthException catch (e) {
       String message = 'NADA';
@@ -55,6 +56,7 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
   Future<void> signOut() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.signOut();
+    await GoogleSignIn().signOut();
     await LocalRepositoryImpl().clearDataInformation();
   }
 
@@ -90,7 +92,7 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
   }
 
   @override
-  Future<ResponseSignIn?> signUpWithGoogle() async {
+  Future<ResponseSignIn> signUpWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication googleAuth =
@@ -100,6 +102,7 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         idToken: googleAuth.idToken,
       );
       final user = await FirebaseAuth.instance.signInWithCredential(credential);
+      print(user);
       final docReference =
           FirebaseFirestore.instance.collection('usuarios').doc(user.user!.uid);
       final documentSnapshot = await docReference.get();
@@ -111,8 +114,8 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
           error: false,
           usuario: Usuario(
             uid: user.user!.uid,
-            constrasena: userData!['contrasena'],
-            correo: userData['correo'],
+            constrasena: '',
+            correo: userData!['correo'],
             edad: userData['edad'],
             nombreCompeto: userData['nombre_completo'],
             sexo: userData['sexo'],
@@ -125,17 +128,28 @@ class ApiAuthRepositoryImplement extends ApiAuthRepositoryInterface {
         final userData = {
           'nombre_completo': usuario!['name'],
           'correo': usuario['email'],
-          'edad': '',
-          'sexo': '',
+          'edad': 'none',
+          'sexo': 'none',
           'racha': 0,
           'enRacha': false,
         };
-        collection.doc(user.user!.uid).set(userData).then((value) {
-          return ResponseSignIn(error: false, message: 'Usuario logeado');
-        });
+        await collection.doc(user.user!.uid).set(userData);
+        return ResponseSignIn(
+          error: false,
+          message: 'Usuario logeado',
+          usuario: Usuario(
+            uid: '',
+            constrasena: '',
+            correo: usuario['email'],
+            edad: 'none',
+            nombreCompeto: usuario['name'],
+            sexo: 'none',
+            racha: 0,
+          ),
+        );
       }
     } catch (e) {
-      return ResponseSignIn(message: e.toString(), error: false);
+      return ResponseSignIn(message: 'el error es $e', error: true);
     }
   }
 

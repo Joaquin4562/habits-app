@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +6,17 @@ import 'package:habits_app/domain/models/habits.model.dart';
 import 'package:habits_app/domain/repository/api_fcm_interface.dart';
 
 class ApiFCMImplements extends ApiFCMInterface {
-  static const PATH = 'https://fcm-backend-habits-app.herokuapp.com';
+  static const PATH =
+      'http://ec2-52-14-138-51.us-east-2.compute.amazonaws.com:3000';
   @override
   Future<void> scheduleNotification(Habitos habito) async {
     TimeOfDay _time = TimeOfDay(
       hour: int.parse(habito.hora.split(":")[0]),
-      minute: int.parse(habito.hora.split(':')[1].split(' ')[0]),
+      minute: int.parse(habito.hora.split(':')[1]),
     );
     Dio().post('$PATH/firebase/schedule/notification', data: {
       'registrationToken': await FirebaseMessaging.instance.getToken(),
-      'title': habito.categoria,
+      'title': 'Hola! ¿Es un buen día no?',
       'body': 'No te olvides de: ${habito.nombre}',
       'days': habito.dias,
       'hour': _time.hour,
@@ -41,19 +41,20 @@ class ApiFCMImplements extends ApiFCMInterface {
       hour: int.parse(habito.hora.split(":")[0]),
       minute: int.parse(habito.hora.split(':')[1].split(' ')[0]),
     );
-    await Dio().post('$PATH/firebase/schedule/notification', data: {
-            'registrationToken': await FirebaseMessaging.instance.getToken(),
-            'title': habito.categoria,
-            'days': habito.dias,
-            'hour': _time.hour,
-            'minute': _time.minute,
-            'body': 'No te olvides de: ${habito.nombre}',
-            'uid': await LocalRepositoryImpl().getToken(),
-            'habitName': habito.nombre,
-          }).then((value) {
-            if (!value.data['error']) {
-              print(value.data['msg']);
-            }
-    });
+    final data = {
+      'registrationToken': await FirebaseMessaging.instance.getToken(),
+      'title': 'Hola! ¿Es un buen día no?',
+      'days': habito.dias,
+      'hour': _time.hour,
+      'minute': _time.minute,
+      'body': 'No te olvides de: ${habito.nombre}',
+      'uid': await LocalRepositoryImpl().getToken(),
+      'habitName': habito.nombre,
+    };
+    try {
+      Dio().post('$PATH/firebase/schedule/notification', data: data);
+    } catch (e) {
+      print(e);
+    }
   }
 }

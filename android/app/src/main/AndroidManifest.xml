@@ -40,6 +40,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+android:resource="@drawable/app_icon" />
         <!-- Alarm Manager -->
         <service
     android:name="io.flutter.plugins.androidalarmmanager.AlarmService"

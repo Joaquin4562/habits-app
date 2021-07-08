@@ -163,7 +163,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                   alignment: Alignment.center,
                                   child: Text(
                                     widget.hour == null
-                                        ? '${DateFormat.jm().format(DateTime(0,0,0,time.hour, time.minute))}'
+                                        ? '${time.format(context)}'
                                         : widget.hour!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -183,7 +183,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                   builder: (context, child) {
                                     final mediaQueryWrapper = MediaQuery(
                                       data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: false),
+                                          alwaysUse24HourFormat: true),
                                       child: Theme(
                                         data: ThemeData.light().copyWith(
                                           colorScheme: ColorScheme.light(
@@ -196,10 +196,10 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                     );
                                     if (Localizations.localeOf(context)
                                             .languageCode ==
-                                        'es') {
+                                        'en') {
                                       return Localizations.override(
                                         context: context,
-                                        locale: Locale('es', 'US'),
+                                        locale: Locale('es', 'MX'),
                                         child: mediaQueryWrapper,
                                       );
                                     }
@@ -245,7 +245,7 @@ class _DialogCreateHabitState extends State<DialogCreateHabit> {
                                   name: name,
                                   category: category,
                                   days: activeDays,
-                                  hour: DateFormat.jm().format(DateTime(0,0,0,time.hour, time.minute)),
+                                  hour: time.format(context),
                                 ),
                               );
                               Navigator.pushReplacementNamed(context, 'home');

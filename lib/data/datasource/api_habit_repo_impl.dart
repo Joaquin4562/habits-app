@@ -56,7 +56,7 @@ class ApiHabitRepositoryImplement extends ApiHabitRepositoryInterface {
         'hora': habito.hour,
         'finalizada': false,
       });
-      await ApiFCMImplements().sendNotification(
+      ApiFCMImplements().sendNotification(
         Habitos(
           categoria: habito.category,
           dias: habito.days,
